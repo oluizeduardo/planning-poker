@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- RESET -->
+    <link href="./styles/reset.css" rel="stylesheet" />
+    <!-- BOOTSTRAP -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link href="./styles/game.css" rel="stylesheet" />
+    <title>Planning Poker | Game</title>
+  </head>
+
+  <body>
+    <!-- <nav class="navbar navbar-light bg-light mb-5 p-3">
+      <div class="container-fluid d-flex justify-content-between">
+        <div class="navbar-brand">
+          <span id="room-name" class="fw-bold"></span>
+        </div>
+        <div>
+          <button
+            id="btnInvitePlayers"
+            class="btn btn-outline-primary my-2 my-sm-0"
+            type="submit">
+            <span data-feather="user-plus"></span>
+            Invite players
+          </button>
+
+          <button
+            id="btnLogOut"
+            class="btn btn-danger my-2 my-sm-0 ms-3"
+            type="submit">
+            <span data-feather="log-out"></span>
+          </button>
+        </div>
+      </div>
+    </nav> -->
+
+
+    <header class="bg-light mb-5 p-3 d-flex">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center justify-content-between">          
+          <!-- ROOM'S NAME -->
+          <span>
+            <div id="room-name" class="fw-bold fs-5"></div>
+          </span>
+  
+          <div class="d-flex justify-content-center">
+            <button
+              id="btnInvitePlayers"
+              class="btn btn-outline-primary my-2 my-sm-0 me-3"
+              type="submit">
+              <span data-feather="user-plus"></span>
+              <span class="btn-text-visibility">Invite players</span>
+            </button>
+
+            <div class="d-flex flex-wrap align-items-center me-3">  
+              <div class="dropdown text-end">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="./imgs/default-user.JPG" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small">
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" id="btnLogOut" href="#">Sign out</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="w-75 mx-auto">
+      <div class="columns-wrapper">
+        <div class="cards-container">
+          <button class="card">
+            <div class="left-icon">1</div>
+            <div class="center-icon">1</div>
+            <div class="right-icon">1</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">2</div>
+            <div class="center-icon">2</div>
+            <div class="right-icon">2</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">3</div>
+            <div class="center-icon">3</div>
+            <div class="right-icon">3</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">5</div>
+            <div class="center-icon">5</div>
+            <div class="right-icon">5</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">8</div>
+            <div class="center-icon">8</div>
+            <div class="right-icon">8</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">13</div>
+            <div class="center-icon">13</div>
+            <div class="right-icon">13</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">21</div>
+            <div class="center-icon">21</div>
+            <div class="right-icon">21</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">34</div>
+            <div class="center-icon">34</div>
+            <div class="right-icon">34</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">?</div>
+            <div class="center-icon">?</div>
+            <div class="right-icon">?</div>
+          </button>
+
+          <button class="card">
+            <div class="left-icon">&#9749;</div>
+            <div class="center-icon">&#9749;</div>
+            <div class="right-icon">&#9749;</div>
+          </button>
+        </div>
+      </div>
+    </main>
+    <!-- BOOTSTRAP -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+    <!-- SOCKET.IO -->
+    <script
+      src="https://cdn.socket.io/4.5.3/socket.io.min.js"
+      integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi"
+      crossorigin="anonymous"
+    ></script>
+    <!-- ICON --><!-- ICONS: https://symbl.cc/en/ -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+      integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      "use strict";
+      feather.replace({ "aria-hidden": "true" });
+    </script>
+    <!-- SWEETALERT -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="./js/game.js" type="module"></script>
+  </body>
+</html>
