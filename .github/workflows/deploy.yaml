@@ -1,0 +1,27 @@
+name: Deploy to Render
+on: 
+  push:
+    branches: [main]
+
+jobs:
+  build-node:
+    name: Build and run Node project
+    runs-on: ubuntu-latest
+    container: node:16
+    steps:
+      - uses: actions/checkout@v3
+        name: Check out code from Github
+
+      - run: npm install
+        name: Install NPM packages
+
+  deploy:
+    name: Deploy to Render
+    needs: [build-node]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}

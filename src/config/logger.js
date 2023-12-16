@@ -1,4 +1,3 @@
-import path from "path";
 import winston from 'winston';
 const {transports} = winston;
 
@@ -16,12 +15,14 @@ const logger = winston.createLogger({
   exitOnError: false,
   format: winston.format.combine(
     winston.format.align(),
-    winston.format.colorize({ all:true }),
+    winston.format.colorize({all: true}),
     winston.format.timestamp({
-       format: 'MMM-DD-YYYY HH:mm:ss'
+      format: 'MMM-DD-YYYY HH:mm:ss',
     }),
-    winston.format.printf(info => `[${info.timestamp}][${info.level}]:${info.message}`),
-  )
+    winston.format.printf((info) => {
+      return `[${info.timestamp}][${info.level}]:${info.message}`;
+    }),
+  ),
 });
 
 export default logger;

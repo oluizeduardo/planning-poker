@@ -1,11 +1,11 @@
-import { emitConnectWithRoom, emitCreateRoom } from "./socket-front-index.js";
+import {emitConnectWithRoom, emitCreateRoom} from './socket-front-index.js';
 
-const form = document.getElementById("form-add-room");
-const inputRoomName = document.getElementById("input-room-name");
-const selectVotingSystem = document.getElementById("select-voting-system");
-const linkConnectRoom = document.getElementById("linkConnectRoom");
+const form = document.getElementById('form-add-room');
+const inputRoomName = document.getElementById('input-room-name');
+const selectVotingSystem = document.getElementById('select-voting-system');
+const linkConnectRoom = document.getElementById('linkConnectRoom');
 
-form.addEventListener("submit", (e) => {
+form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const roomName = inputRoomName.value;
@@ -13,20 +13,20 @@ form.addEventListener("submit", (e) => {
 
   if (roomName && indexVotingSystem > 0) {
     emitCreateRoom(roomName);
-    inputRoomName.value = "";
+    inputRoomName.value = '';
   } else {
     swal({
-      title: "",
-      text: "Please, inform the room's name and the voting system.",
-      icon: "warning",
+      title: '',
+      text: 'Please, inform the room\'s name and the voting system.',
+      icon: 'warning',
     });
   }
 });
 
-linkConnectRoom.addEventListener("click", (e) => {
+linkConnectRoom.addEventListener('click', (e) => {
   swal({
-    text: "Please, inform the room id.",
-    content: "input",
+    text: 'Please, inform the room id.',
+    content: 'input',
     buttons: {
       cancel: true,
       confirm: true,

@@ -67,6 +67,10 @@ body {
 button {
   cursor: pointer;
 }
+.panel-players {
+  width: 20%;
+  margin-right: 30px;
+}
 @media (min-width: 1400px) {
   .cards-container {
     width: 60%;
@@ -87,5 +91,9 @@ button {
     padding: 8px;
     font-size: 35px;
     height: 110px;
+  }
+  .panel-players {
+    width: 100%;
+    margin: 10px;
   }
 }
