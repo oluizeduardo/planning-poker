@@ -5,6 +5,7 @@ import http from 'http';
 import logger from './config/logger.js';
 import 'dotenv/config';
 import {Server} from 'socket.io';
+import getLocalIPAddress from './util/localIPAddress.js';
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -13,7 +14,8 @@ const port = process.env.PORT || 4500;
 app.use(express.static(getPublicFolderPath()));
 
 httpServer.listen(port, () => {
-  logger.info(`Server running at http://localhost:${port}`);
+  const host = getLocalIPAddress();
+  logger.info(`Server running at http://${host}:${port}`);
 });
 
 /**
