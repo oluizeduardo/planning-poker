@@ -6,7 +6,11 @@ const btnInvitePlayers = document.getElementById('btnInvitePlayers');
 const roomNameLabel = document.getElementById('room-name');
 
 window.addEventListener('load', () => {
-  connectInTheRoom();
+  if (getRoomId()) {
+    connectInTheRoom();
+  } else {
+    redirectToIndex();
+  }
 });
 
 btnLogOut.addEventListener('click', (e) => {
@@ -18,7 +22,7 @@ btnLogOut.addEventListener('click', (e) => {
     dangerMode: true,
   }).then((confirmExit) => {
     if (confirmExit) {
-      window.location.href = '/';
+      redirectToIndex();
     }
   });
 });
@@ -102,4 +106,12 @@ function getValueFromParameter(parameter) {
   const urlObject = new URL(window.location.href);
   const parameters = urlObject.searchParams;
   return parameters.get(parameter);
+}
+
+/**
+ * Redirects the user to the index page.
+ * @return {void}
+ */
+function redirectToIndex() {
+  window.location.href = '/';
 }
