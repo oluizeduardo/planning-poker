@@ -3,11 +3,16 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100vh;
 }
-.columns-wrapper {
+header {
+  margin-bottom: 40px;
+  padding: 1rem;
+}
+.panel-cards {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  width: 75%;
 }
 .cards-container {
   display: flex;
@@ -77,6 +82,10 @@ button {
   }
 }
 @media (max-width: 500px) {
+  header {
+    margin-bottom: 20px;
+    padding: 0.5rem;
+  }
   .cards-container {
     width: 100%;
   }
@@ -84,16 +93,19 @@ button {
     display: none;
   }
   .card {
-    width: 113px;
-    height: 140px;
+    width: 93px;
+    height: 115px;
   }
   .center-icon {
-    padding: 8px;
-    font-size: 35px;
+    padding: 6px;
+    font-size: 33px;
     height: 110px;
   }
   .panel-players {
     width: 100%;
     margin: 10px;
+  }
+  .panel-cards {
+    width: 100%;
   }
 }

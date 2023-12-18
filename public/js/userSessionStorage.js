@@ -10,9 +10,7 @@ const ANONYMOUS_NAME = 'Anonymous';
  */
 function checkForUserName() {
   const user = getUser();
-  if (user) {
-    console.log('Found user:', user);
-  } else {
+  if (!user) {
     askForUserName();
   }
 }
