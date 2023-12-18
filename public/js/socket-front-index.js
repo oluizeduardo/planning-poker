@@ -19,52 +19,15 @@ function emitCreateRoom(roomName) {
 }
 
 /**
- * Emits a connection request to the server
- * for a specific room and handles the response.
- *
- * @param {string} roomId - The unique identifier of the room to connect to.
- * @param {string} roomName - The name of the room.
- *
- * @throws {Error} If the socket is not defined.
- *
- * @return {void}
- *
- * @callback connectCallback
- * @param {boolean} isConnected - Indicates whether the connection
- * to the room was successful.
- *
- * @example
- * // Example usage:
- * emitConnectWithRoom('room123', 'My Room');
- */
-function emitConnectWithRoom(roomId, roomName) {
-  socket.emit('connect_room', roomId, (isConnected) => {
-    if (isConnected) {
-      console.log(`Client connected with success in the room [${roomId}]`);
-      redirectToTheGame(roomId, roomName);
-    } else {
-      swal({
-        title: 'Room not available!',
-        text: 'Please check the room\'s code.',
-        icon: 'info',
-      }).then(() => {
-        window.location.href = '/';
-      });
-    }
-  });
-}
-
-/**
  * Redirects the user to the game page with specified room parameters.
  *
  * @param {string} roomId - The ID of the room.
- * @param {string} roomName - The name of the room.
  * @return {void}
  */
-function redirectToTheGame(roomId, roomName) {
+function redirectToTheGame(roomId) {
   const params = new URLSearchParams();
   params.append('id', roomId);
   window.location.href = '/game.html?' + params.toString();
 }
 
-export {emitCreateRoom, emitConnectWithRoom};
+export {emitCreateRoom, redirectToTheGame};

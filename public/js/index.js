@@ -1,4 +1,4 @@
-import {emitConnectWithRoom, emitCreateRoom} from './socket-front-index.js';
+import {emitCreateRoom, redirectToTheGame} from './socket-front-index.js';
 
 const form = document.getElementById('form-add-room');
 const inputRoomName = document.getElementById('input-room-name');
@@ -33,7 +33,7 @@ linkConnectRoom.addEventListener('click', (e) => {
     },
   }).then((roomId) => {
     if (roomId) {
-      emitConnectWithRoom(roomId);
+      redirectToTheGame(roomId);
     }
   });
 });

@@ -64,8 +64,6 @@ function getUsers(roomId) {
  *
  * @param {string} roomId - The unique identifier of the game room.
  * @param {object} user - The user object to be added to the room's connections.
- * @param {string} user.username - The username of the user joining the game.
- * @param {any} user.additionalData - Additional data about the user (optional).
  * @return {void}
  */
 function joinGame(roomId, user) {
@@ -126,4 +124,12 @@ function resetGame(id) {
   });
 }
 
-export {createGame, findById, joinGame, removeUser, updatePoint, resetGame};
+export {
+  createGame,
+  findById,
+  joinGame,
+  removeUser,
+  updatePoint,
+  resetGame,
+  getUsers,
+};

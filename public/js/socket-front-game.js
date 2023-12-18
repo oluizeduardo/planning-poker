@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const socket = io();
 
 socket.on('disconnect', () => {
@@ -14,17 +15,17 @@ socket.on('disconnect', () => {
  * Emits a 'connect_room' event with the specified roomId
  * to the socket and handles the response.
  *
- * @param {string} roomId - The ID of the room to connect to.
+ * @param {string} newConnection
  * @param {function} callback - The callback function to be executed
  * after the connection attempt. It receives the name of the found room
  * if successful.
  * @return {void}
  */
-function emitConnectWithRoom(roomId, callback) {
-  socket.emit('connect_room', roomId, (foundRoom) => {
+function emitConnectWithRoom(newConnection, callback) {
+  socket.emit('connect_room', newConnection, (foundRoom) => {
     if (foundRoom) {
-      console.log(`Client connected with sucess in the room [${roomId}]`);
-      callback(foundRoom.name);
+      console.log(`Client connected with success in the room [${newConnection.roomId}]`);
+      callback(foundRoom.roomName);
     } else {
       swal({
         title: 'Room not available!',

@@ -1,12 +1,12 @@
+/* eslint-disable max-len */
 import {emitConnectWithRoom} from './socket-front-game.js';
-import {checkForUserName} from './userSessionStorage.js';
 
 const btnLogOut = document.getElementById('btnLogOut');
 const btnInvitePlayers = document.getElementById('btnInvitePlayers');
 const roomNameLabel = document.getElementById('room-name');
 
-window.addEventListener('load', (event) => {
-  checkForUserName();
+window.addEventListener('load', () => {
+  connectInTheRoom();
 });
 
 btnLogOut.addEventListener('click', (e) => {
@@ -25,7 +25,6 @@ btnLogOut.addEventListener('click', (e) => {
 
 btnInvitePlayers.addEventListener('click', (e) => {
   const roomId = getRoomId();
-  // eslint-disable-next-line max-len
   const message = `Share this code with your teammates and start playing!\n\n${roomId}`;
   swal('Invite players', message);
 });
@@ -40,9 +39,42 @@ btnInvitePlayers.addEventListener('click', (e) => {
  * @throws {Error} Throws an error if the connection with the room fails.
  * @return {void}
  */
-function connectIntheRoom() {
-  emitConnectWithRoom(getRoomId(), (roomName) => {
-    roomNameLabel.innerText = roomName;
+function connectInTheRoom() {
+  askForUserName()
+    .then((userName) => {
+      const newConnection = {
+        roomId: getRoomId(),
+        connection: {
+          userName: userName,
+        },
+      };
+      emitConnectWithRoom(newConnection, (roomName) => {
+        console.log(`Player [${userName}] online in the room [${roomName}].`);
+        roomNameLabel.innerText = roomName;
+      });
+    })
+    .catch((error) => {
+      console.error('Error:', error.message);
+    });
+}
+
+/**
+ * Prompts the user to enter their name using a SweetAlert (swal) dialog.
+ * @return {Promise<string | null>} A Promise that resolves with the
+ * entered name or null if the user cancels the input.
+ * @throws {Error} If SweetAlert is not available or if there is
+ * an issue displaying the dialog.
+ */
+function askForUserName() {
+  return swal({
+    title: 'Now write your name',
+    text: 'How you want the team to identify you.',
+    content: 'input',
+    closeOnClickOutside: false,
+    closeOnEsc: false,
+    buttons: {
+      confirm: true,
+    },
   });
 }
 
@@ -71,5 +103,3 @@ function getValueFromParameter(parameter) {
   const parameters = urlObject.searchParams;
   return parameters.get(parameter);
 }
-
-connectIntheRoom();

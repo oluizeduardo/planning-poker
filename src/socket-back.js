@@ -1,21 +1,9 @@
 /* eslint-disable valid-jsdoc */
 /* eslint-disable max-len */
 import logger from './config/logger.js';
+import {createGame, findById, getUsers, joinGame} from './models/game.model.js';
 import io from './server.js';
 import {v4 as uuidv4, v5 as uuidv5} from 'uuid';
-
-/**
- * List of the available rooms.
- */
-const rooms = [];
-
-io.of('/').adapter.on('create-room', (room) => {
-  logger.info(`Room [${room}] was created.`);
-});
-
-io.of('/').adapter.on('join-room', (room, id) => {
-  logger.info(`Socket [${id}] has joined room [${room}].`);
-});
 
 io.on('connection', handleConnection);
 
@@ -36,11 +24,8 @@ function handleConnection(socket) {
   socket.on('create_room', (roomName, callback) => {
     handleCreateRoom(socket, roomName, callback);
   });
-  socket.on('connect_room', (roomId, callback) => {
-    handleConnectRoom(socket, roomId, callback);
-  });
-  socket.on('disconnect', (reason) => {
-    handleDisconnect(socket, reason);
+  socket.on('connect_room', (newConnection, callback) => {
+    handleConnectRoom(socket, newConnection, callback);
   });
 }
 
@@ -59,10 +44,7 @@ function handleCreateRoom(socket, roomName, callback) {
     return socket.disconnect();
   }
   const roomId = createIdFromString(roomName);
-  addRoom({
-    id: roomId,
-    name: roomName,
-  });
+  createGame(roomId, roomName);
   callback(roomId);
 }
 
@@ -70,22 +52,32 @@ function handleCreateRoom(socket, roomName, callback) {
  * Handles the connection of a client to a room identified by the given roomId.
  *
  * @param {object} socket - The socket object representing the client connection.
- * @param {string} roomId - The unique identifier of the room to connect to.
+ * @param {string} newConnection - Object containing details of the new connection.
  * @param {function} callback - A callback function to be called after the connection attempt.
  *                              It receives the found room as an argument.
  * @returns {void}
  */
-function handleConnectRoom(socket, roomId, callback) {
-  const foundRoom = findRoomById(roomId);
+function handleConnectRoom(socket, newConnection, callback) {
+  const roomId = newConnection.roomId;
+  const userName = newConnection.connection.userName;
+  const userId = socket.id;
+
+  const foundRoom = findById(roomId);
 
   if (foundRoom) {
     // Join the socket to the identified room
     socket.join(roomId);
 
+    const user = {userId, userName, point: null};
+    joinGame(roomId, user);
+
+    const users = getUsers(roomId);
+
     // Log information about the new client connection
     logger.info(
-      `New client connected - Client id: [${socket.id}] - Room name: [${foundRoom.name}] - Room id: [${foundRoom.id}]`,
+      `New client connected - Client id: [${socket.id}] - Room name: [${foundRoom.roomName}] - Room id: [${foundRoom.roomId}]`,
     );
+    logger.info(`Room id: [${roomId}] - Number of connections: [${users.length}]`);
 
     // Invoke the callback with the found room
     callback(foundRoom);
@@ -94,17 +86,6 @@ function handleConnectRoom(socket, roomId, callback) {
     logger.warn(`Attempted to join non-existent room.`);
     callback(foundRoom);
   }
-}
-
-/**
- * Handles the disconnection of a client socket and logs the event.
- *
- * @param {Socket} socket - The socket object representing the disconnected client.
- * @param {string} reason - The reason for the disconnection.
- * @returns {void}
- */
-function handleDisconnect(socket, reason) {
-  logger.info(`Client [${socket.id}] disconnected! - Reason: ${reason}`);
 }
 
 /**
@@ -118,25 +99,4 @@ function handleDisconnect(socket, reason) {
 function createIdFromString(text) {
   const randomUuid = uuidv4();
   return uuidv5(text, randomUuid);
-}
-
-/**
- * Adds a room to the list of rooms.
- *
- * @param {any} room - The room to be added.
- * @returns {void} - This function does not return anything. *
- * @throws {TypeError} - If the 'room' parameter is not provided.
- */
-function addRoom(room) {
-  rooms.push(room);
-}
-
-/**
- * Finds a room in the collection based on the provided room ID.
- *
- * @param {string|number} roomId - The unique identifier of the room to be found.
- * @returns {Object|undefined} - The room object if found, or undefined if not found.
- */
-function findRoomById(roomId) {
-  return rooms.find((room) => room.id === roomId);
 }
