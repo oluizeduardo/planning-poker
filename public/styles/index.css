@@ -2,8 +2,18 @@ body {
   background-color: #eaeff6;
   width: 75%;
 }
+.panel_logo-center{
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+.logo-center{
+  display: flex;
+}
 @media (max-width: 700px) {
   body {
     width: 100%;
+  }
+  .logo-center{
+    display: block;
   }
 }

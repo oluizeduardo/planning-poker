@@ -1,13 +1,17 @@
 /* eslint-disable max-len */
-import {emitConnectWithRoom} from './socket-front-game.js';
+import {emitConnectWithRoom, emitGetPlayers} from './socket-front-game.js';
+import {clearStorage, getUser, saveUser} from './userSessionStorage.js';
 
 const btnLogOut = document.getElementById('btnLogOut');
 const btnInvitePlayers = document.getElementById('btnInvitePlayers');
 const roomNameLabel = document.getElementById('room-name');
+const playersList = document.getElementById('players-list');
 
 window.addEventListener('load', () => {
-  if (getRoomId()) {
+  const roomId = getRoomId();
+  if (roomId) {
     connectInTheRoom();
+    emitGetPlayers(roomId);
   } else {
     redirectToIndex();
   }
@@ -22,6 +26,7 @@ btnLogOut.addEventListener('click', (e) => {
     dangerMode: true,
   }).then((confirmExit) => {
     if (confirmExit) {
+      clearStorage();
       redirectToIndex();
     }
   });
@@ -44,22 +49,33 @@ btnInvitePlayers.addEventListener('click', (e) => {
  * @return {void}
  */
 function connectInTheRoom() {
-  askForUserName()
-    .then((userName) => {
-      const newConnection = {
-        roomId: getRoomId(),
-        connection: {
-          userName: userName,
-        },
-      };
-      emitConnectWithRoom(newConnection, (roomName) => {
-        console.log(`Player [${userName}] online in the room [${roomName}].`);
-        roomNameLabel.innerText = roomName;
+  if (!getUser()) {
+    askForUserName()
+      .then((userName) => {
+        if (!userName) userName = 'Anonymous';
+        const newConnection = {
+          roomId: getRoomId(),
+          connection: {
+            userName: userName,
+          },
+        };
+        emitConnectWithRoom(newConnection, printRoomName);
+        saveUser(userName);
+      })
+      .catch((error) => {
+        console.error('Error:', error.message);
       });
-    })
-    .catch((error) => {
-      console.error('Error:', error.message);
-    });
+  }
+}
+
+/**
+ * Updates the text content of a DOM element with the provided room name.
+ *
+ * @param {string} roomName - The name of the room to be displayed.
+ * @return {void} - This function does not return a value.
+ */
+function printRoomName(roomName) {
+  roomNameLabel.innerText = roomName;
 }
 
 /**
@@ -72,7 +88,7 @@ function connectInTheRoom() {
 function askForUserName() {
   return swal({
     title: 'Now write your name',
-    text: 'How you want the team to identify you.',
+    text: 'Or leave it blank to enter as anonymous.',
     content: 'input',
     closeOnClickOutside: false,
     closeOnEsc: false,
@@ -115,3 +131,22 @@ function getValueFromParameter(parameter) {
 function redirectToIndex() {
   window.location.href = '/';
 }
+
+/**
+ * Adds a player name to the players list in the HTML.
+ *
+ * @param {string} userName - The name of the player to be added to the list.
+ */
+function addPlayerNameOnTheList(userName) {
+  playersList.innerHTML +=
+  `<li class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+      <h6 class="my-0">${userName}</h6>
+    </div>
+    <h5>
+      <strong class="pe-3">...</strong>
+    </h5>
+  </li>`;
+}
+
+export {addPlayerNameOnTheList};

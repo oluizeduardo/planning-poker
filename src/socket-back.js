@@ -17,8 +17,6 @@ io.on('connection', handleConnection);
  * @listens 'connect_room' - Listens for the 'connect_room' event to connect to an existing room.
  * @param {string} roomId - The ID of the room to connect to.
  * @param {function} callback - The callback function to be executed after connecting to the room.
- * @listens 'disconnect' - Listens for the 'disconnect' event to handle disconnection.
- * @param {string} reason - The reason for the disconnection.
  */
 function handleConnection(socket) {
   socket.on('create_room', (roomName, callback) => {
@@ -26,6 +24,9 @@ function handleConnection(socket) {
   });
   socket.on('connect_room', (newConnection, callback) => {
     handleConnectRoom(socket, newConnection, callback);
+  });
+  socket.on('get_players', (roomId, getListOfPlayers) => {
+    getListOfPlayers(getUsers(roomId));
   });
 }
 
@@ -68,9 +69,11 @@ function handleConnectRoom(socket, newConnection, callback) {
     // Join the socket to the identified room
     socket.join(roomId);
 
+    // Save user details in the room's register.
     const user = {userId, userName, point: null};
     joinGame(roomId, user);
 
+    // Get the list of users in a specific room.
     const users = getUsers(roomId);
 
     // Log information about the new client connection
@@ -78,6 +81,9 @@ function handleConnectRoom(socket, newConnection, callback) {
       `New client connected - Client id: [${socket.id}] - Room name: [${foundRoom.roomName}] - Room id: [${foundRoom.roomId}]`,
     );
     logger.info(`Room id: [${roomId}] - Number of connections: [${users.length}]`);
+
+    // Emit event to update the list of players.
+    io.emit('update_players_list', userName);
 
     // Invoke the callback with the found room
     callback(foundRoom);
@@ -91,12 +97,16 @@ function handleConnectRoom(socket, newConnection, callback) {
 /**
  * Generates a unique identifier based on the provided text using UUIDv4 and UUIDv5.
  *
- * @param {string} text - The input text for creating the identifier.
- * @returns {string} The generated unique identifier.
+ * @param {string} text - The input text used to create the identifier.
+ * @returns {string} The generated identifier, truncated to the first part.
  *
- * @throws {Error} Throws an error if the UUIDv4 or UUIDv5 generation fails.
+ * @example
+ * // Example usage:
+ * const result = createIdFromString('example_text');
+ * console.log(result); // Output: e4f95a02
  */
 function createIdFromString(text) {
   const randomUuid = uuidv4();
-  return uuidv5(text, randomUuid);
+  const fullId = uuidv5(text, randomUuid);
+  return fullId.split('-')[0];
 }

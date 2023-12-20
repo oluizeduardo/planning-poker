@@ -1,19 +1,4 @@
 const KEY_STORAGE = 'p-poker-user';
-const ANONYMOUS_NAME = 'Anonymous';
-
-/**
- * Checks for the presence of a user name.
- * If a user is found, logs the user information;
- * otherwise, prompts the user to enter a user name.
- * @function
- * @return {void}
- */
-function checkForUserName() {
-  const user = getUser();
-  if (!user) {
-    askForUserName();
-  }
-}
 
 /**
  * Retrieves the user information from the sessionStorage
@@ -28,32 +13,6 @@ function getUser() {
 }
 
 /**
- * Prompts the user to enter their name using a SweetAlert dialog.
- * If the user leaves the input blank, they will be entered as anonymous.
- *
- * @function
- * @name askForUserName
- * @return {void}
- *
- * @example
- * // Call the function to prompt the user for their name
- * askForUserName();
- */
-function askForUserName() {
-  swal({
-    title: 'Write your name',
-    text: 'Or leave it blank to enter as anonymous.',
-    content: 'input',
-    buttons: {
-      confirm: true,
-    },
-  }).then((userName) => {
-    if (!userName) userName = ANONYMOUS_NAME;
-    saveUser(userName);
-  });
-}
-
-/**
  * Saves the user's name to the session storage.
  *
  * @param {string} userName - The name of the user to be saved.
@@ -65,4 +24,12 @@ function saveUser(userName) {
   sessionStorage.setItem(KEY_STORAGE, userName);
 }
 
-export {checkForUserName};
+/**
+ * Clear session storage.
+ * Delete all the user names saved.
+ */
+function clearStorage() {
+  sessionStorage.clear();
+}
+
+export {getUser, saveUser, clearStorage};

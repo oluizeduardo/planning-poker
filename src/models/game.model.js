@@ -20,10 +20,6 @@ const rooms = [
  * @return {void}
  * @throws {Error} Throws an error if the provided id
  * or roomName is not a string.
- *
- * @example
- * // Create a new game room with id "123" and name "MyRoom"
- * createGame("123", "MyRoom");
  */
 function createGame(roomId, roomName) {
   rooms.push({
