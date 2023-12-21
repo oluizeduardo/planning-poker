@@ -28,6 +28,20 @@ function handleConnection(socket) {
   socket.on('get_players', (roomId, getListOfPlayers) => {
     getListOfPlayers(getUsers(roomId));
   });
+  socket.on('check_room_availability', (roomId, callback) => {
+    handleCheckRoomAvailability(roomId, callback);
+  });
+}
+
+/**
+ * Checks the availability of a room with the specified roomId.
+ *
+ * @param {string} roomId - The identifier of the room to check availability for.
+ * @returns {boolean} Returns a boolean indicating whether the room exists or not.
+ *                   If the callback is not a function, it disconnects the socket.
+ */
+function handleCheckRoomAvailability(roomId, callback) {
+  callback(findById(roomId));
 }
 
 /**
@@ -99,11 +113,6 @@ function handleConnectRoom(socket, newConnection, callback) {
  *
  * @param {string} text - The input text used to create the identifier.
  * @returns {string} The generated identifier, truncated to the first part.
- *
- * @example
- * // Example usage:
- * const result = createIdFromString('example_text');
- * console.log(result); // Output: e4f95a02
  */
 function createIdFromString(text) {
   const randomUuid = uuidv4();

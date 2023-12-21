@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import {emitConnectWithRoom, emitGetPlayers} from './socket-front-game.js';
+import {emitCheckRoomAvailability, emitConnectWithRoom, emitGetPlayers} from './socket-front-game.js';
 import {clearStorage, getUser, saveUser} from './userSessionStorage.js';
 
 const btnLogOut = document.getElementById('btnLogOut');
@@ -49,23 +49,64 @@ btnInvitePlayers.addEventListener('click', (e) => {
  * @return {void}
  */
 function connectInTheRoom() {
-  if (!getUser()) {
-    askForUserName()
-      .then((userName) => {
-        if (!userName) userName = 'Anonymous';
-        const newConnection = {
-          roomId: getRoomId(),
-          connection: {
-            userName: userName,
-          },
-        };
-        emitConnectWithRoom(newConnection, printRoomName);
-        saveUser(userName);
-      })
-      .catch((error) => {
-        console.error('Error:', error.message);
-      });
-  }
+  const roomId = getRoomId();
+
+  emitCheckRoomAvailability(roomId, async (room) => {
+    if (room) {
+      if (!getUser()) {
+        try {
+          const userName = await askForUserName();
+          let finalUserName = userName;
+
+          if (!isNonEmptyString(userName)) {
+            finalUserName = 'Anonymous';
+          }
+
+          const newConnection = {
+            roomId: getRoomId(),
+            connection: {
+              userName: finalUserName,
+            },
+          };
+
+          saveUser(finalUserName);
+          emitConnectWithRoom(newConnection, printRoomName);
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
+      } else {
+        printRoomName(room.roomName);
+      }
+    } else {
+      handleRoomNotAvailable();
+    }
+  });
+}
+
+/**
+ * Checks whether a given input is a non-null, non-empty string.
+ * @param {string} input - The input to be checked for non-null, non-empty string condition.
+ * @return {boolean} - Returns `true` if the input is a non-null, non-empty string; otherwise, returns `false`.
+ */
+function isNonEmptyString(input) {
+  return input && input.trim().length > 0;
+}
+
+/**
+ * Handles the scenario when a room is not available.
+ * Displays a sweet alert with information about the unavailability,
+ * prompting the user to check the room's code. After the alert is dismissed,
+ * it redirects the user to the index page.
+ * @return {void}
+ */
+function handleRoomNotAvailable() {
+  swal({
+    title: 'Room not available!',
+    text: 'Please check the room\'s code.',
+    icon: 'info',
+  }).then(() => {
+    redirectToIndex();
+  });
 }
 
 /**
@@ -144,9 +185,9 @@ function addPlayerNameOnTheList(userName) {
       <h6 class="my-0">${userName}</h6>
     </div>
     <h5>
-      <strong class="pe-3">...</strong>
+      <strong class="pe-3"></strong>
     </h5>
   </li>`;
 }
 
-export {addPlayerNameOnTheList};
+export {addPlayerNameOnTheList, redirectToIndex};

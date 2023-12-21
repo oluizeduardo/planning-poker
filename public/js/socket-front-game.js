@@ -1,4 +1,5 @@
-import {addPlayerNameOnTheList} from './game.js';
+import {addPlayerNameOnTheList, redirectToIndex} from './game.js';
+import {clearStorage} from './userSessionStorage.js';
 
 /* eslint-disable max-len */
 const socket = io();
@@ -9,12 +10,12 @@ socket.on('disconnect', () => {
     text: 'You are disconnected from this room.',
     icon: 'warning',
   }).then(() => {
-    window.location.href = '/';
+    clearStorage();
+    redirectToIndex();
   });
 });
 
 socket.on('update_players_list', (userName) => {
-  console.log(`ADD NEW PLAYER [${userName}]`);
   addPlayerNameOnTheList(userName);
 });
 
@@ -62,4 +63,19 @@ function emitGetPlayers(roomId) {
   });
 }
 
-export {emitConnectWithRoom, emitGetPlayers};
+/**
+ * Emits a request to check the availability of a room with the specified ID to the server.
+ * The server responds with information about the room, which is then passed to the provided callback function.
+ *
+ * @param {string} roomId - The unique identifier of the room to be checked for availability.
+ * @param {function} callback - A callback function to handle the response from the server.
+ *   It receives the room information as its parameter.
+ * @return {void}
+ */
+function emitCheckRoomAvailability(roomId, callback) {
+  socket.emit('check_room_availability', roomId, (room) => {
+    callback(room);
+  });
+}
+
+export {emitConnectWithRoom, emitGetPlayers, emitCheckRoomAvailability};
