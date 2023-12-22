@@ -1,4 +1,9 @@
-import {addPlayerNameOnTheList, redirectToIndex} from './game.js';
+/* eslint-disable max-len */
+import {
+  addPlayerNameOnTheList,
+  redirectToIndex,
+  showMessageNewPlayerOnline,
+} from './game.js';
 import {clearStorage} from './userSessionStorage.js';
 
 /* eslint-disable max-len */
@@ -17,6 +22,7 @@ socket.on('disconnect', () => {
 
 socket.on('update_players_list', (userName) => {
   addPlayerNameOnTheList(userName);
+  showMessageNewPlayerOnline(userName);
 });
 
 /**

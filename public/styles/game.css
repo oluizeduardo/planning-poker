@@ -76,6 +76,13 @@ button {
   width: 20%;
   margin-right: 30px;
 }
+.custom-alert {
+  position: fixed;
+  top: 88vh;
+  right: 70px;
+  display: none;
+  z-index: 1000;
+}
 @media (min-width: 1400px) {
   .cards-container {
     width: 60%;
@@ -107,5 +114,8 @@ button {
   }
   .panel-cards {
     width: 100%;
+  }
+  .custom-alert {    
+    right: 20px;
   }
 }

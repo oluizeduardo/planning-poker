@@ -190,4 +190,24 @@ function addPlayerNameOnTheList(userName) {
   </li>`;
 }
 
-export {addPlayerNameOnTheList, redirectToIndex};
+/**
+ * Displays a message indicating that a new player is online.
+ *
+ * @param {string} [userName] - The username of the new player. If not provided, a default name is used.
+ * @return {void}
+ */
+function showMessageNewPlayerOnline(userName) {
+  const alertContainer = document.getElementById('alertContainer');
+  const alertMessage = document.getElementById('alert_message');
+
+  const name = !userName ? 'New Player' : `<strong>${userName}</strong> is`;
+  alertMessage.innerHTML = `${name} online.`;
+
+  alertContainer.style.display = 'block';
+  // Hide the alert container after 2500 milliseconds (2.5 seconds)
+  setTimeout(() => {
+    alertContainer.style.display = 'none';
+  }, 2700);
+}
+
+export {addPlayerNameOnTheList, redirectToIndex, showMessageNewPlayerOnline};
