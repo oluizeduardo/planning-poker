@@ -1,7 +1,14 @@
 /* eslint-disable valid-jsdoc */
 /* eslint-disable max-len */
+import {
+  createGame,
+  findById,
+  getUser,
+  getUsers,
+  joinGame,
+  removeUser,
+} from './models/game.model.js';
 import logger from './config/logger.js';
-import {createGame, findById, getUsers, joinGame} from './models/game.model.js';
 import io from './server.js';
 import {v4 as uuidv4, v5 as uuidv5} from 'uuid';
 
@@ -11,12 +18,6 @@ io.on('connection', handleConnection);
  * Handles incoming socket connections and sets up event listenersfor specific events.
  *
  * @param {Socket} socket - The socket object representing the connection.
- * @listens 'create_room' - Listens for the 'create_room' event to create a new room.
- * @param {string} roomName - The name of the room to be created.
- * @param {function} callback - The callback function to be executed after creating the room.
- * @listens 'connect_room' - Listens for the 'connect_room' event to connect to an existing room.
- * @param {string} roomId - The ID of the room to connect to.
- * @param {function} callback - The callback function to be executed after connecting to the room.
  */
 function handleConnection(socket) {
   socket.on('create_room', (roomName, callback) => {
@@ -28,9 +29,28 @@ function handleConnection(socket) {
   socket.on('get_players', (roomId, getListOfPlayers) => {
     getListOfPlayers(getUsers(roomId));
   });
+  socket.on('disconnect_player', (roomId, userId) => {
+    handleDisconnectPlayer(roomId, userId);
+  });
   socket.on('check_room_availability', (roomId, callback) => {
     handleCheckRoomAvailability(roomId, callback);
   });
+}
+
+/**
+ * Handles the disconnection of a player from a room.
+ *
+ * This function removes the specified user from the room using the provided
+ * roomId and userId.
+ *
+ * @param {string} roomId - The identifier of the room from which the player is disconnecting.
+ * @param {string} userId - The identifier of the user who is disconnecting.
+ * @return {void} This function does not return a value directly.
+ */
+function handleDisconnectPlayer(roomId, userId) {
+  const userToBeRemoved = getUser(roomId, userId);
+  removeUser(roomId, userId);
+  emitRemovePlayerFromList(io, userToBeRemoved);
 }
 
 /**
@@ -92,12 +112,12 @@ function handleConnectRoom(socket, newConnection, callback) {
 
     // Log information about the new client connection
     logger.info(
-      `New client connected - Client id: [${socket.id}] - Room name: [${foundRoom.roomName}] - Room id: [${foundRoom.roomId}]`,
+      `New client connected - Client id: [${userId}] - Room name: [${foundRoom.roomName}] - Room id: [${foundRoom.roomId}]`,
     );
     logger.info(`Room id: [${roomId}] - Number of connections: [${users.length}]`);
 
-    // Emit event to update the list of players.
-    io.emit('update_players_list', userName);
+    // Emit event to add a new player on the list.
+    io.emit('add_player_list', {userName, userId});
 
     // Invoke the callback with the found room
     callback(foundRoom);
@@ -118,4 +138,15 @@ function createIdFromString(text) {
   const randomUuid = uuidv4();
   const fullId = uuidv5(text, randomUuid);
   return fullId.split('-')[0];
+}
+
+/**
+ * Emits a 'remove_player_list' event to the provided Socket.IO instance,
+ * signaling the removal of a player with the specified userId from the player list.
+ *
+ * @param {string} user - The user to be removed from the list.
+ * @returns {void}
+ */
+function emitRemovePlayerFromList(io, user) {
+  io.emit('remove_player_list', user);
 }

@@ -1,6 +1,15 @@
 /* eslint-disable max-len */
-import {emitCheckRoomAvailability, emitConnectWithRoom, emitGetPlayers} from './socket-front-game.js';
-import {clearStorage, getUser, saveUser} from './userSessionStorage.js';
+import {
+  emitCheckRoomAvailability,
+  emitConnectWithRoom,
+  emitDisconnectPlayer,
+  emitGetPlayers,
+} from './socket-front-game.js';
+import {
+  clearStorage,
+  getUserData,
+  saveUserData,
+} from './userSessionStorage.js';
 
 const btnLogOut = document.getElementById('btnLogOut');
 const btnInvitePlayers = document.getElementById('btnInvitePlayers');
@@ -26,8 +35,7 @@ btnLogOut.addEventListener('click', (e) => {
     dangerMode: true,
   }).then((confirmExit) => {
     if (confirmExit) {
-      clearStorage();
-      redirectToIndex();
+      processDisconnectPlayer();
     }
   });
 });
@@ -37,6 +45,44 @@ btnInvitePlayers.addEventListener('click', (e) => {
   const message = `Share this code with your teammates and start playing!\n\n${roomId}`;
   swal('Invite players', message);
 });
+
+/**
+ * Disconnects the player from the current session.
+ *
+ * This function retrieves the user data, emits a disconnect event
+ * to the server, clears local storage, and redirects the user to
+ * the index page.
+ *
+ * This function should only be executed during the logout.
+ *
+ * @return {void} This function does not return a value.
+ */
+function processDisconnectPlayer() {
+  const userData = JSON.parse(getUserData());
+  emitDisconnectPlayer(userData.roomId, userData.userId);
+  clearStorage();
+  redirectToIndex();
+}
+
+/**
+ * Removes a player's HTML element from a list based on the provided user ID.
+ *
+ * This function looks for an HTML element with the specified user ID and removes it
+ * from its parent node (assumed to be a list). If the element is not found, a message
+ * is logged to the console.
+ *
+ * @param {string} userId - The unique identifier of the player to be removed.
+ * @return {void} This function does not return a value directly.
+ */
+function removePlayerFromList(userId) {
+  const elementToRemove = document.getElementById(userId);
+  if (elementToRemove) {
+    const list = elementToRemove.parentNode;
+    list.removeChild(elementToRemove);
+  } else {
+    console.log(`Player with ID ${userId} not found to remove.`);
+  }
+}
 
 /**
  * Establishes a connection with a room and updates the room name label.
@@ -53,7 +99,7 @@ function connectInTheRoom() {
 
   emitCheckRoomAvailability(roomId, async (room) => {
     if (room) {
-      if (!getUser()) {
+      if (!getUserData()) {
         try {
           const userName = await askForUserName();
           let finalUserName = userName;
@@ -69,8 +115,8 @@ function connectInTheRoom() {
             },
           };
 
-          saveUser(finalUserName);
-          emitConnectWithRoom(newConnection, printRoomName);
+          saveUserData(finalUserName);
+          emitConnectWithRoom(newConnection, processesBasicSettings);
         } catch (error) {
           console.error('Error:', error.message);
         }
@@ -107,6 +153,21 @@ function handleRoomNotAvailable() {
   }).then(() => {
     redirectToIndex();
   });
+}
+
+/**
+ * Processes basic settings for user data.
+ *
+ * This function takes a data object containing user information,
+ * including roomName, and performs operations such as saving the
+ * user data and printing the room name.
+ *
+ * @param {Object} data - The data object containing user information.
+ * @return {void} This function does not return a value.
+ */
+function processesBasicSettings(data) {
+  saveUserData(JSON.stringify(data));
+  printRoomName(data.roomName);
 }
 
 /**
@@ -174,13 +235,18 @@ function redirectToIndex() {
 }
 
 /**
- * Adds a player name to the players list in the HTML.
+ * Adds a player's name to the player list in the HTML.
  *
- * @param {string} userName - The name of the player to be added to the list.
+ * This function appends a new list item to the player list with the specified
+ * user name and user ID, creating a visual representation of the player.
+ *
+ * @param {string} userName - The name of the player to be added.
+ * @param {string} userId - The unique identifier for the player.
+ * @return {void} This function does not return a value.
  */
-function addPlayerNameOnTheList(userName) {
+function addPlayerNameOnTheList(userName, userId) {
   playersList.innerHTML +=
-  `<li class="list-group-item d-flex justify-content-between align-items-center">
+  `<li id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
     <div>
       <h6 class="my-0">${userName}</h6>
     </div>
@@ -197,17 +263,46 @@ function addPlayerNameOnTheList(userName) {
  * @return {void}
  */
 function showMessageNewPlayerOnline(userName) {
+  const name = userName ? `<strong>${userName}</strong> is` : 'New Player';
+  const message = `${name} online.`;
+  showAlertMessage(message);
+}
+
+/**
+ * Displays a message indicating that a player left the room.
+ *
+ * @param {string} [userName] - The username of the new player. If not provided, a default message is used.
+ * @return {void}
+ */
+function showMessagePlayerDisconnected(userName) {
+  const name = userName ? `<strong>${userName}</strong>` : 'A player';
+  const message = `${name} left the room.`;
+  showAlertMessage(message);
+}
+
+/**
+ * Displays an alert message in a designated container on the webpage.
+ *
+ * @param {string} message - The message to be displayed in the alert.
+ * @return {void} - The function does not return any value.
+ */
+function showAlertMessage(message) {
   const alertContainer = document.getElementById('alertContainer');
   const alertMessage = document.getElementById('alert_message');
 
-  const name = !userName ? 'New Player' : `<strong>${userName}</strong> is`;
-  alertMessage.innerHTML = `${name} online.`;
-
+  alertMessage.innerHTML = message;
   alertContainer.style.display = 'block';
-  // Hide the alert container after 2500 milliseconds (2.5 seconds)
+
+  // Hide the alert container after 2700 milliseconds (2.7 seconds)
   setTimeout(() => {
     alertContainer.style.display = 'none';
   }, 2700);
 }
 
-export {addPlayerNameOnTheList, redirectToIndex, showMessageNewPlayerOnline};
+export {
+  addPlayerNameOnTheList,
+  redirectToIndex,
+  showMessageNewPlayerOnline,
+  removePlayerFromList,
+  showMessagePlayerDisconnected,
+};

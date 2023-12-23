@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const rooms = [
   {
     roomId: '0000000000000000000',
@@ -56,6 +57,20 @@ function getUsers(roomId) {
 }
 
 /**
+ * Retrieves user information based on the provided room ID and user ID.
+ *
+ * @param {string} roomId - The ID of the room in which the user is present.
+ * @param {string} userId - The ID of the user whose information is to be retrieved.
+ * @return {Object|Array} - The user information if found, or null if not found.
+ */
+function getUser(roomId, userId) {
+  const users = getUsers(roomId);
+  const idx = users.findIndex((i) => i.userId === userId);
+  if (idx != -1) return users[idx];
+  return null;
+}
+
+/**
  * Joins a user to a game room identified by its roomId.
  *
  * @param {string} roomId - The unique identifier of the game room.
@@ -68,18 +83,19 @@ function joinGame(roomId, user) {
 }
 
 /**
- * Removes a user from a specified room by their user ID.
+ * Remove a user from the room.
  *
- * @param {string} roomId - The ID of the room from which to remove the user.
- * @param {string} userId - The ID of the user to be removed.
+ * @param {string} roomId - O ID da sala da qual o usuário será removido.
+ * @param {string} userId - O ID do usuário a ser removido da sala.
  * @return {void}
  */
 function removeUser(roomId, userId) {
-  const users = getUsers(roomId);
-  const idx = users.findIndex((i) => i.roomId == roomId);
-  if (idx != -1) {
-    const userIdx = rooms[idx].connections.findIndex((i) => i.id === userId);
-    if (userIdx != -1) rooms[idx].connections.splice(userIdx, 1);
+  const roomIndex = rooms.findIndex((room) => room.roomId === roomId);
+  if (roomIndex !== -1) {
+    const userIndex = rooms[roomIndex].connections.findIndex((user) => user.userId === userId);
+    if (userIndex !== -1) {
+      rooms[roomIndex].connections.splice(userIndex, 1);
+    }
   }
 }
 
@@ -128,4 +144,5 @@ export {
   updatePoint,
   resetGame,
   getUsers,
+  getUser,
 };

@@ -1,27 +1,24 @@
-const KEY_STORAGE = 'p-poker-user';
+const KEY_STORAGE = 'p-poker-user-data';
 
 /**
- * Retrieves the user information from the sessionStorage
- * based on a predefined key.
- *
- * @function
+ * Retrieves the user information from the sessionStorage.
  * @return {string|null} The user information stored in
  * sessionStorage, or null if not found.
  */
-function getUser() {
+function getUserData() {
   return sessionStorage.getItem(KEY_STORAGE);
 }
 
 /**
- * Saves the user's name to the session storage.
+ * Saves the user's data to the session storage.
  *
- * @param {string} userName - The name of the user to be saved.
+ * @param {string} userData - The user's data to be saved.
  * @throws {DOMException} If the storage quota is exceeded
  * or if the user denies storage access.
  * @return {void}
  */
-function saveUser(userName) {
-  sessionStorage.setItem(KEY_STORAGE, userName);
+function saveUserData(userData) {
+  sessionStorage.setItem(KEY_STORAGE, userData);
 }
 
 /**
@@ -32,4 +29,8 @@ function clearStorage() {
   sessionStorage.clear();
 }
 
-export {getUser, saveUser, clearStorage};
+export {
+  getUserData,
+  saveUserData,
+  clearStorage,
+};

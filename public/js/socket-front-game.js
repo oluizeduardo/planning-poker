@@ -2,7 +2,9 @@
 import {
   addPlayerNameOnTheList,
   redirectToIndex,
+  removePlayerFromList,
   showMessageNewPlayerOnline,
+  showMessagePlayerDisconnected,
 } from './game.js';
 import {clearStorage} from './userSessionStorage.js';
 
@@ -20,9 +22,14 @@ socket.on('disconnect', () => {
   });
 });
 
-socket.on('update_players_list', (userName) => {
-  addPlayerNameOnTheList(userName);
-  showMessageNewPlayerOnline(userName);
+socket.on('add_player_list', (data) => {
+  addPlayerNameOnTheList(data.userName, data.userId);
+  showMessageNewPlayerOnline(data.userName);
+});
+
+socket.on('remove_player_list', (user) => {
+  removePlayerFromList(user.userId);
+  showMessagePlayerDisconnected(user.userName);
 });
 
 /**
@@ -41,7 +48,15 @@ function emitConnectWithRoom(newConnection, callback) {
       console.log(
         `Client connected with success in the room [${newConnection.roomId}]`,
       );
-      callback(foundRoom.roomName);
+
+      const newConnectionResponseData = {
+        userName: newConnection.connection.userName,
+        userId: socket.id,
+        roomName: foundRoom.roomName,
+        roomId: foundRoom.roomId,
+      };
+
+      callback(newConnectionResponseData);
     } else {
       swal({
         title: 'Room not available!',
@@ -64,7 +79,7 @@ function emitConnectWithRoom(newConnection, callback) {
 function emitGetPlayers(roomId) {
   socket.emit('get_players', roomId, (players) => {
     players.forEach((player) => {
-      addPlayerNameOnTheList(player.userName);
+      addPlayerNameOnTheList(player.userName, player.userId);
     });
   });
 }
@@ -84,4 +99,23 @@ function emitCheckRoomAvailability(roomId, callback) {
   });
 }
 
-export {emitConnectWithRoom, emitGetPlayers, emitCheckRoomAvailability};
+/**
+ * Emits a 'disconnect_player' event to the server and executes a callback upon completion.
+ *
+ * This function sends a 'disconnect_player' event to the server with the provided
+ * roomId and userId.
+ *
+ * @param {string} roomId - The identifier of the room where the disconnection occurred.
+ * @param {string} userId - The identifier of the user who disconnected.
+ * @return {void} This function does not return a value directly.
+ */
+function emitDisconnectPlayer(roomId, userId) {
+  socket.emit('disconnect_player', roomId, userId);
+}
+
+export {
+  emitConnectWithRoom,
+  emitGetPlayers,
+  emitCheckRoomAvailability,
+  emitDisconnectPlayer,
+};
