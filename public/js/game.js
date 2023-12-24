@@ -15,6 +15,7 @@ const btnLogOut = document.getElementById('btnLogOut');
 const btnInvitePlayers = document.getElementById('btnInvitePlayers');
 const roomNameLabel = document.getElementById('room-name');
 const playersList = document.getElementById('players-list');
+const playerNameManuItem = document.getElementById('player-name-menu-item');
 
 window.addEventListener('load', () => {
   const roomId = getRoomId();
@@ -168,6 +169,7 @@ function handleRoomNotAvailable() {
 function processesBasicSettings(data) {
   saveUserData(JSON.stringify(data));
   printRoomName(data.roomName);
+  playerNameManuItem.innerText = data.userName;
 }
 
 /**
