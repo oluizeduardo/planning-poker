@@ -51,6 +51,7 @@ function handleDisconnectPlayer(roomId, userId) {
   const userToBeRemoved = getUser(roomId, userId);
   removeUser(roomId, userId);
   emitRemovePlayerFromList(io, userToBeRemoved);
+  logRoomSizeStatus(roomId);
 }
 
 /**
@@ -107,14 +108,13 @@ function handleConnectRoom(socket, newConnection, callback) {
     const user = {userId, userName, point: null};
     joinGame(roomId, user);
 
-    // Get the list of users in a specific room.
-    const users = getUsers(roomId);
-
     // Log information about the new client connection
     logger.info(
       `New client connected - Client id: [${userId}] - Room name: [${foundRoom.roomName}] - Room id: [${foundRoom.roomId}]`,
     );
-    logger.info(`Room id: [${roomId}] - Number of connections: [${users.length}]`);
+
+    // Log information about the room size.
+    logRoomSizeStatus(roomId);
 
     // Emit event to add a new player on the list.
     io.emit('add_player_list', {userName, userId});
@@ -126,6 +126,18 @@ function handleConnectRoom(socket, newConnection, callback) {
     logger.warn(`Attempted to join non-existent room.`);
     callback(foundRoom);
   }
+}
+
+/**
+ * Logs information about the size/status of a room.
+ *
+ * @param {string} roomId - The unique identifier of the room.
+ * @returns {void} - This function does not return any value.
+ * @throws {Error} - If there is an issue retrieving user information for the specified room.
+ */
+function logRoomSizeStatus(roomId) {
+  const users = getUsers(roomId);
+  logger.info(`Room id: [${roomId}] - Number of connections: [${users.length}]`);
 }
 
 /**

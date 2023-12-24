@@ -169,7 +169,20 @@ function handleRoomNotAvailable() {
 function processesBasicSettings(data) {
   saveUserData(JSON.stringify(data));
   printRoomName(data.roomName);
-  playerNameManuItem.innerText = data.userName;
+  printPlayerNameInProfileMenu(data.userName);
+}
+
+/**
+ * Updates the player's name in the profile menu item.
+ *
+ * This function takes a user name as a parameter and sets the inner text of the
+ * profile menu item to display the provided user name.
+ *
+ * @param {string} userName - The name of the player to be displayed in the profile menu.
+ * @return {void} - This function does not return any value.
+ */
+function printPlayerNameInProfileMenu(userName) {
+  playerNameManuItem.innerText = userName;
 }
 
 /**
@@ -307,4 +320,5 @@ export {
   showMessageNewPlayerOnline,
   removePlayerFromList,
   showMessagePlayerDisconnected,
+  printPlayerNameInProfileMenu,
 };
