@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import {
   addPlayerNameOnTheList,
+  printPlayerNameInProfileMenu,
   redirectToIndex,
   removePlayerFromList,
   showMessageNewPlayerOnline,
@@ -80,6 +81,7 @@ function emitGetPlayers(roomId) {
   socket.emit('get_players', roomId, (players) => {
     players.forEach((player) => {
       addPlayerNameOnTheList(player.userName, player.userId);
+      printPlayerNameInProfileMenu(player.userName);
     });
   });
 }
