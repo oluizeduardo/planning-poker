@@ -1,11 +1,16 @@
 body {
-  background-color: #eaeff6;
+  background-color: #eaeff6; 
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100vh;
+}
+.avatar {
+  width: 28.6px;
+  height: 28.6px;
 }
 header {
   margin-bottom: 40px;
   padding: 1rem;
+  background-color: rgba(51, 51, 51, 1);
 }
 .panel-cards {
   display: flex;

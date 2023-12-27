@@ -262,8 +262,9 @@ function redirectToIndex() {
 function addPlayerNameOnTheList(userName, userId) {
   playersList.innerHTML +=
   `<li id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
-    <div>
-      <h6 class="my-0">${userName}</h6>
+    <div class="d-flex align-items-center">
+      <img class="avatar me-2" src="https://api.dicebear.com/7.x/bottts/svg?seed=${userName}" alt="Avatar">
+      <h6 class="my-0">${userName}</h6>    
     </div>
     <h5>
       <strong class="pe-3"></strong>

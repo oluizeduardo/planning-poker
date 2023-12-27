@@ -3,14 +3,17 @@ Planning Poker is a way to estimate a relative effort for a given task.
 
 # Technologies applied
 - Backend
-    - NodeJS
+    - [NodeJS](https://nodejs.org/en)
     - [Express](https://expressjs.com/)
+    - [Socket.io](https://socket.io/)
 - Frontend
     - [Bootstrap](https://getbootstrap.com/)
     - [SweetAlert](https://sweetalert.js.org/)
+    - [DiceBear Avatar Library](https://www.dicebear.com/)
 - Quality
     - Static analysis
         - [ESLint](https://eslint.org/)
+        - [Sonar Cloud](https://sonarcloud.io/summary/new_code?id=oluizeduardo_planning-poker)
 - CICD
     - [GitHub Actions](https://docs.github.com/en/actions)
 - Deploy
