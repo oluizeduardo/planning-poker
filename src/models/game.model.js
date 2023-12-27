@@ -52,7 +52,7 @@ function findById(roomId) {
  */
 function getUsers(roomId) {
   const idx = rooms.findIndex((i) => i.roomId === roomId);
-  if (idx != -1) return rooms[idx].connections;
+  if (idx !== -1) return rooms[idx].connections;
   return [];
 }
 
@@ -100,6 +100,19 @@ function removeUser(roomId, userId) {
 }
 
 /**
+ * Delete a specific room from the list of rooms.
+ *
+ * @param {string} roomId - O ID da sala da qual o usuário será removido.
+ * @return {void}
+ */
+function deleteRoom(roomId) {
+  const roomIndex = rooms.findIndex((room) => room.roomId === roomId);
+  if (roomIndex !== -1) {
+    rooms.splice(roomIndex, 1);
+  }
+}
+
+/**
  * Updates the point value for a user with the specified ID in the room.
  *
  * @param {string} id - The unique identifier of the user whose
@@ -123,11 +136,11 @@ function updatePoint(id, point) {
  * Resets the game by setting the points of all users
  * in the specified room to null.
  *
- * @param {string} id - The identifier of the room where
+ * @param {string} roomId - The identifier of the room where
  * the game is to be reset.
  * @return {void}
  */
-function resetGame(id) {
+function resetGame(roomId) {
   const users = getUsers(roomId);
 
   // Map over the users and set their points to null.
@@ -136,13 +149,25 @@ function resetGame(id) {
   });
 }
 
+/**
+ * Checks if a given room is empty.
+ *
+ * @param {string} roomId - The identifier of the room to be checked.
+ * @return {boolean} Returns true if the room is empty (has no users), otherwise false.
+ */
+function isRoomEmpty(roomId) {
+  return (getUsers(roomId).length === 0);
+}
+
 export {
   createGame,
   findById,
   joinGame,
   removeUser,
+  deleteRoom,
   updatePoint,
   resetGame,
   getUsers,
   getUser,
+  isRoomEmpty,
 };

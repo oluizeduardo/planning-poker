@@ -2,9 +2,11 @@
 /* eslint-disable max-len */
 import {
   createGame,
+  deleteRoom,
   findById,
   getUser,
   getUsers,
+  isRoomEmpty,
   joinGame,
   removeUser,
 } from './models/game.model.js';
@@ -50,8 +52,13 @@ function handleConnection(socket) {
 function handleDisconnectPlayer(roomId, userId) {
   const userToBeRemoved = getUser(roomId, userId);
   removeUser(roomId, userId);
-  emitRemovePlayerFromList(io, userToBeRemoved);
-  logRoomSizeStatus(roomId);
+  if (isRoomEmpty(roomId)) {
+    deleteRoom(roomId);
+    logger.info(`Room [${roomId}] is empty and has been deleted.`);
+  } else {
+    logRoomSizeStatus(roomId);
+    emitRemovePlayerFromList(io, userToBeRemoved);
+  }
 }
 
 /**
