@@ -20,7 +20,7 @@ const playerNameManuItem = document.getElementById('player-name-menu-item');
 window.addEventListener('load', () => {
   const roomId = getRoomId();
   if (roomId) {
-    connectInTheRoom();
+    connectInTheRoom(roomId);
     emitGetPlayers(roomId);
   } else {
     redirectToIndex();
@@ -59,7 +59,7 @@ btnInvitePlayers.addEventListener('click', (e) => {
  * @return {void} This function does not return a value.
  */
 function processDisconnectPlayer() {
-  const userData = JSON.parse(getUserData());
+  const userData = getUserData();
   emitDisconnectPlayer(userData.roomId, userData.userId);
   clearStorage();
   redirectToIndex();
@@ -86,48 +86,59 @@ function removePlayerFromList(userId) {
 }
 
 /**
- * Establishes a connection with a room and updates the room name label.
+ * Connects to a specified room, checking its availability
+ * and handling the connection process.
  *
- * This function uses the `emitConnectWithRoom` function to connect to a room
- * identified by the current room ID. Once connected, the room name is retrieved
- * and updated in the specified label element.
- *
- * @throws {Error} Throws an error if the connection with the room fails.
+ * @param {string} roomId - The identifier of the room to connect to.
  * @return {void}
  */
-function connectInTheRoom() {
-  const roomId = getRoomId();
+async function connectInTheRoom(roomId) {
+  const room = await checkRoomAvailability(roomId);
+  if (room) {
+    handleRoomAvailable(room);
+  } else {
+    handleRoomNotAvailable();
+  }
+}
 
-  emitCheckRoomAvailability(roomId, async (room) => {
-    if (room) {
-      if (!getUserData()) {
-        try {
-          const userName = await askForUserName();
-          let finalUserName = userName;
-
-          if (!isNonEmptyString(userName)) {
-            finalUserName = 'Anonymous';
-          }
-
-          const newConnection = {
-            roomId: getRoomId(),
-            connection: {
-              userName: finalUserName,
-            },
-          };
-
-          saveUserData(finalUserName);
-          emitConnectWithRoom(newConnection, processesBasicSettings);
-        } catch (error) {
-          console.error('Error:', error.message);
-        }
-      } else {
-        printRoomName(room.roomName);
-      }
-    } else {
-      handleRoomNotAvailable();
-    }
+/**
+ * Checks the availability of the specified room.
+ *
+ * @param {string} roomId - The identifier of the room to check.
+ * @return {Object|null} - Information about the room if available, or null if not.
+ */
+async function checkRoomAvailability(roomId) {
+  return new Promise((resolve) => {
+    emitCheckRoomAvailability(roomId, resolve);
   });
+}
+
+/**
+ * Handles the case when the specified room is available.
+ *
+ * @param {Object} room - Information about the available room.
+ * @return {void}
+ */
+async function handleRoomAvailable(room) {
+  if (!getUserData()) {
+    try {
+      const userName = await askForUserName();
+      const finalUserName = isNonEmptyString(userName) ? userName : 'Anonymous';
+
+      const newConnection = {
+        roomId: getRoomId(),
+        connection: {
+          userName: finalUserName,
+        },
+      };
+
+      emitConnectWithRoom(newConnection, processesBasicSettings);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  } else {
+    printRoomName(room.roomName);
+  }
 }
 
 /**
