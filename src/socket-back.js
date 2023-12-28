@@ -32,7 +32,7 @@ function handleConnection(socket) {
     getListOfPlayers(getUsers(roomId));
   });
   socket.on('disconnect_player', (roomId, userId) => {
-    handleDisconnectPlayer(roomId, userId);
+    handleDisconnectPlayer(socket, roomId, userId);
   });
   socket.on('check_room_availability', (roomId, callback) => {
     handleCheckRoomAvailability(roomId, callback);
@@ -49,15 +49,17 @@ function handleConnection(socket) {
  * @param {string} userId - The identifier of the user who is disconnecting.
  * @return {void} This function does not return a value directly.
  */
-function handleDisconnectPlayer(roomId, userId) {
+function handleDisconnectPlayer(socket, roomId, userId) {
+  socket.leave(roomId);
   const userToBeRemoved = getUser(roomId, userId);
   removeUser(roomId, userId);
+  logger.info(`Client [${userId}] has been disconnected from the room [${roomId}].`);
   if (isRoomEmpty(roomId)) {
     deleteRoom(roomId);
     logger.info(`Room [${roomId}] is empty and has been deleted.`);
   } else {
     logRoomSizeStatus(roomId);
-    emitRemovePlayerFromList(io, userToBeRemoved);
+    emitRemovePlayerFromList(io, roomId, userToBeRemoved);
   }
 }
 
@@ -124,7 +126,7 @@ function handleConnectRoom(socket, newConnection, callback) {
     logRoomSizeStatus(roomId);
 
     // Emit event to add a new player on the list.
-    io.emit('add_player_list', {userName, userId});
+    io.to(roomId).emit('add_player_list', {userName, userId});
 
     // Invoke the callback with the found room
     callback(foundRoom);
@@ -160,12 +162,15 @@ function createIdFromString(text) {
 }
 
 /**
- * Emits a 'remove_player_list' event to the provided Socket.IO instance,
- * signaling the removal of a player with the specified userId from the player list.
+ * Emits a 'remove_player_list' event to the specified room using Socket.IO,
+ * indicating the removal of a player from the list.
  *
- * @param {string} user - The user to be removed from the list.
+ * @param {SocketIO.Server} io - The Socket.IO server instance.
+ * @param {string} roomId - The unique identifier of the room to which the event is emitted.
+ * @param {object} user - The user object representing the player to be removed from the list.
+ *                       This object should contain the necessary information about the player.
  * @returns {void}
  */
-function emitRemovePlayerFromList(io, user) {
-  io.emit('remove_player_list', user);
+function emitRemovePlayerFromList(io, roomId, user) {
+  io.to(roomId).emit('remove_player_list', user);
 }

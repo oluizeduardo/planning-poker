@@ -7,9 +7,8 @@ import {
   showMessageNewPlayerOnline,
   showMessagePlayerDisconnected,
 } from './game.js';
-import {clearStorage} from './userSessionStorage.js';
+import {clearStorage, getUserData} from './userSessionStorage.js';
 
-/* eslint-disable max-len */
 const socket = io();
 
 socket.on('disconnect', () => {
@@ -18,8 +17,8 @@ socket.on('disconnect', () => {
     text: 'You are disconnected from this room.',
     icon: 'warning',
   }).then(() => {
-    clearStorage();
     redirectToIndex();
+    clearStorage();
   });
 });
 
@@ -79,9 +78,12 @@ function emitConnectWithRoom(newConnection, callback) {
  */
 function emitGetPlayers(roomId) {
   socket.emit('get_players', roomId, (players) => {
+    const playerInSession = getUserData();
     players.forEach((player) => {
       addPlayerNameOnTheList(player.userName, player.userId);
-      printPlayerNameInProfileMenu(player.userName);
+      if (player.userId === playerInSession.userId) {
+        printPlayerNameInProfileMenu(player.userName);
+      }
     });
   });
 }

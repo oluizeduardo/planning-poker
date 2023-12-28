@@ -1,12 +1,15 @@
 const KEY_STORAGE = 'p-poker-user-data';
 
 /**
- * Retrieves the user information from the sessionStorage.
- * @return {string|null} The user information stored in
- * sessionStorage, or null if not found.
+ * Retrieves user data from session storage.
+ * @return {Object|null} - User data if found, or null if not found.
  */
 function getUserData() {
-  return sessionStorage.getItem(KEY_STORAGE);
+  const storedData = sessionStorage.getItem(KEY_STORAGE);
+  if (storedData) {
+    return JSON.parse(storedData);
+  }
+  return null;
 }
 
 /**
