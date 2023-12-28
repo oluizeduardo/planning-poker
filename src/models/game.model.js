@@ -100,6 +100,21 @@ function removeUser(roomId, userId) {
 }
 
 /**
+ * Removes a user with the specified userId from all rooms.
+ *
+ * @param {string} userId - The unique identifier of the user to be removed.
+ */
+function removeUserById(userId) {
+  for (const room of rooms) {
+    const userIndex = room.connections.findIndex((user) => user.userId === userId);
+    if (userIndex !== -1) {
+      room.connections.splice(userIndex, 1);
+      break;
+    }
+  }
+}
+
+/**
  * Delete a specific room from the list of rooms.
  *
  * @param {string} roomId - O ID da sala da qual o usuário será removido.
@@ -164,6 +179,7 @@ export {
   findById,
   joinGame,
   removeUser,
+  removeUserById,
   deleteRoom,
   updatePoint,
   resetGame,

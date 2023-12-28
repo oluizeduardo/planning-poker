@@ -9,6 +9,7 @@ import {
   isRoomEmpty,
   joinGame,
   removeUser,
+  removeUserById,
 } from './models/game.model.js';
 import logger from './config/logger.js';
 import io from './server.js';
@@ -36,6 +37,9 @@ function handleConnection(socket) {
   });
   socket.on('check_room_availability', (roomId, callback) => {
     handleCheckRoomAvailability(roomId, callback);
+  });
+  socket.on('disconnect', () => {
+    removeUserById(socket.id);
   });
 }
 
@@ -125,8 +129,10 @@ function handleConnectRoom(socket, newConnection, callback) {
     // Log information about the room size.
     logRoomSizeStatus(roomId);
 
-    // Emit event to add a new player on the list.
-    io.to(roomId).emit('add_player_list', {userName, userId});
+    const users = getUsers(roomId);
+
+    // Emit event to update the list of players.
+    io.to(roomId).emit('add_player_list', user, users);
 
     // Invoke the callback with the found room
     callback(foundRoom);

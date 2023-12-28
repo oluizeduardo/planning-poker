@@ -22,9 +22,9 @@ socket.on('disconnect', () => {
   });
 });
 
-socket.on('add_player_list', (data) => {
-  addPlayerNameOnTheList(data.userName, data.userId);
-  showMessageNewPlayerOnline(data.userName);
+socket.on('add_player_list', (newUser, users) => {
+  addPlayerNameOnTheList(users);
+  showMessageNewPlayerOnline(newUser.userName);
 });
 
 socket.on('remove_player_list', (user) => {

@@ -120,24 +120,21 @@ async function checkRoomAvailability(roomId) {
  * @return {void}
  */
 async function handleRoomAvailable(room) {
-  if (!getUserData()) {
-    try {
-      const userName = await askForUserName();
-      const finalUserName = isNonEmptyString(userName) ? userName : 'Anonymous';
+  try {
+    const storedData = getUserData() || {};
+    const userName = isNonEmptyString(storedData.userName) ? storedData.userName : await askForUserName();
+    const finalUserName = isNonEmptyString(userName) ? userName : 'Anonymous';
 
-      const newConnection = {
-        roomId: getRoomId(),
-        connection: {
-          userName: finalUserName,
-        },
-      };
+    const userData = {
+      roomId: storedData.roomId || getRoomId(),
+      connection: {
+        userName: finalUserName,
+      },
+    };
 
-      emitConnectWithRoom(newConnection, processesBasicSettings);
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-  } else {
-    printRoomName(room.roomName);
+    emitConnectWithRoom(userData, processesBasicSettings);
+  } catch (error) {
+    console.error('Error:', error.message);
   }
 }
 
@@ -178,7 +175,7 @@ function handleRoomNotAvailable() {
  * @return {void} This function does not return a value.
  */
 function processesBasicSettings(data) {
-  saveUserData(JSON.stringify(data));
+  saveUserData(data);
   printRoomName(data.roomName);
   printPlayerNameInProfileMenu(data.userName);
 }
@@ -266,21 +263,26 @@ function redirectToIndex() {
  * This function appends a new list item to the player list with the specified
  * user name and user ID, creating a visual representation of the player.
  *
- * @param {string} userName - The name of the player to be added.
+ * @param {string} users - A list of users.
  * @param {string} userId - The unique identifier for the player.
  * @return {void} This function does not return a value.
  */
-function addPlayerNameOnTheList(userName, userId) {
-  playersList.innerHTML +=
-  `<li id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center">
-      <img class="avatar me-2" src="https://api.dicebear.com/7.x/bottts/svg?seed=${userName}" alt="Avatar">
-      <h6 class="my-0">${userName}</h6>    
-    </div>
-    <h5>
-      <strong class="pe-3"></strong>
-    </h5>
-  </li>`;
+function addPlayerNameOnTheList(users) {
+  let html = '';
+  users.forEach((user) => {
+    const {userId, userName} = user;
+    html += `
+      <li id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <img class="avatar me-2" src="https://api.dicebear.com/7.x/bottts/svg?seed=${userName}" alt="Avatar">
+          <h6 class="my-0">${userName}</h6>    
+        </div>
+        <h5>
+          <strong class="pe-3"></strong>
+        </h5>
+      </li>`;
+  });
+  playersList.innerHTML = html;
 }
 
 /**

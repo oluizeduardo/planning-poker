@@ -21,7 +21,7 @@ function getUserData() {
  * @return {void}
  */
 function saveUserData(userData) {
-  sessionStorage.setItem(KEY_STORAGE, userData);
+  sessionStorage.setItem(KEY_STORAGE, JSON.stringify(userData));
 }
 
 /**
