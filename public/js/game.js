@@ -59,8 +59,9 @@ btnEditPlayerName.addEventListener('click', () => {
       const userData = getUserData();
       const {userId, roomId} = userData;
       const updatedData = {userId, roomId, newName};
-      saveUserData({...userData, userName: newName});
       emitUpdatePlayerName(updatedData);
+      saveUserData({...userData, userName: newName});
+      printPlayerNameInProfileMenu(newName);
     })
     .catch((error) => {
       console.error('An error occurred while updating the player name:', error);
