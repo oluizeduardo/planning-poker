@@ -38,6 +38,9 @@ function handleConnection(socket) {
   socket.on('check_room_availability', (roomId, callback) => {
     handleCheckRoomAvailability(roomId, callback);
   });
+  socket.on('update_player_name', (data) => {
+    handleUpdatePlayerName(data);
+  });
   socket.on('disconnect', () => {
     removeUserById(socket.id);
   });
@@ -76,6 +79,28 @@ function handleDisconnectPlayer(socket, roomId, userId) {
  */
 function handleCheckRoomAvailability(roomId, callback) {
   callback(findById(roomId));
+}
+
+/**
+ * Handles the update of a player's name within a specific room.
+ *
+ * This function retrieves the user from the specified room using the provided
+ * user ID and room ID, updates the user's username with the new name if the user
+ * is found.
+ *
+ * @param {Object} data - The data object containing information about the update.
+ * @param {string} data.userId - The unique identifier of the user whose name is to be updated.
+ * @param {string} data.roomId - The unique identifier of the room where the user is located.
+ * @param {string} data.newName - The new name to set for the user.
+ * @return {void} - This function does not return any value.
+ */
+function handleUpdatePlayerName(data) {
+  const user = getUser(data.roomId, data.userId);
+  if (user) {
+    user.userName = data.newName;
+    const users = getUsers(data.roomId);
+    io.to(data.roomId).emit('add_player_list', user, users);
+  }
 }
 
 /**

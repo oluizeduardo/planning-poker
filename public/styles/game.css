@@ -88,6 +88,14 @@ button {
   display: none;
   z-index: 1000;
 }
+.icon-edit{
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+}
+.icon-edit:hover{
+  cursor: pointer;
+}
 @media (min-width: 1300px) {
   .cards-container {
     width: 80%;

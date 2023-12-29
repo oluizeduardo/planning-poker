@@ -4,6 +4,7 @@ import {
   emitConnectWithRoom,
   emitDisconnectPlayer,
   emitGetPlayers,
+  emitUpdatePlayerName,
 } from './socket-front-game.js';
 import {
   clearStorage,
@@ -13,6 +14,7 @@ import {
 
 const btnLogOut = document.getElementById('btnLogOut');
 const btnInvitePlayers = document.getElementById('btnInvitePlayers');
+const btnEditPlayerName = document.getElementById('btnEditName');
 const roomNameLabel = document.getElementById('room-name');
 const playersList = document.getElementById('players-list');
 const playerNameManuItem = document.getElementById('player-name-menu-item');
@@ -27,6 +29,7 @@ window.addEventListener('load', () => {
   }
 });
 
+// LOG OUT
 btnLogOut.addEventListener('click', (e) => {
   swal({
     title: 'Leave the room?',
@@ -41,10 +44,25 @@ btnLogOut.addEventListener('click', (e) => {
   });
 });
 
+// INVITE PLAYERS
 btnInvitePlayers.addEventListener('click', (e) => {
   const roomId = getRoomId();
   const message = `Share this code with your teammates and start playing!\n\n${roomId}`;
   swal('Invite players', message);
+});
+
+// UPDATE PLAYER'S NAME
+btnEditPlayerName.addEventListener('click', async (e) => {
+  try {
+    const newName = await askForUserName() || 'Anonymous';
+    const userData = getUserData();
+    const {userId, roomId} = userData;
+    const updatedData = {userId, roomId, newName};
+    saveUserData({...userData, userName: newName});
+    emitUpdatePlayerName(updatedData);
+  } catch (error) {
+    console.error('An error occurred while updating the player name:', error);
+  }
 });
 
 /**
@@ -59,8 +77,8 @@ btnInvitePlayers.addEventListener('click', (e) => {
  * @return {void} This function does not return a value.
  */
 function processDisconnectPlayer() {
-  const userData = getUserData();
-  emitDisconnectPlayer(userData.roomId, userData.userId);
+  const {roomId, userId} = getUserData();
+  emitDisconnectPlayer(roomId, userId);
   clearStorage();
   redirectToIndex();
 }
@@ -95,7 +113,7 @@ function removePlayerFromList(userId) {
 async function connectInTheRoom(roomId) {
   const room = await checkRoomAvailability(roomId);
   if (room) {
-    handleRoomAvailable(room);
+    handleRoomAvailable(roomId);
   } else {
     handleRoomNotAvailable();
   }
@@ -114,21 +132,23 @@ async function checkRoomAvailability(roomId) {
 }
 
 /**
- * Handles the case when the specified room is available.
+ * Handles the availability of a room by obtaining user data and connecting to the room.
  *
- * @param {Object} room - Information about the available room.
- * @return {void}
+ * @async
+ * @function
+ * @param {string} roomId - The ID of the room.
+ * @throws {Error} If there is an error during the process.
+ * @return {Promise<void>} A promise that resolves once the room is handled.
  */
-async function handleRoomAvailable(room) {
+async function handleRoomAvailable(roomId) {
   try {
     const storedData = getUserData() || {};
-    const userName = isNonEmptyString(storedData.userName) ? storedData.userName : await askForUserName();
-    const finalUserName = isNonEmptyString(userName) ? userName : 'Anonymous';
+    const userName = await getValidUserName(storedData.userName);
 
     const userData = {
-      roomId: storedData.roomId || getRoomId(),
+      roomId: roomId || getRoomId(),
       connection: {
-        userName: finalUserName,
+        userName: userName || 'Anonymous',
       },
     };
 
@@ -136,6 +156,23 @@ async function handleRoomAvailable(room) {
   } catch (error) {
     console.error('Error:', error.message);
   }
+}
+
+/**
+ * Retrieves a valid user name, either from the stored user data or by prompting the user.
+ * If the stored user name is non-empty, it is used.
+ * Otherwise, the user is prompted to provide a user name.
+ *
+ * @async
+ * @function
+ * @param {string} storedUserName - The user name stored in the user data.
+ * @return {Promise<?string>} A promise that resolves to a valid user name.
+ *        If a valid user name is obtained, it is returned; otherwise, null.
+ * @throws {Error} Throws an error if there is an issue with obtaining the user name.
+ */
+async function getValidUserName(storedUserName) {
+  const userName = isNonEmptyString(storedUserName) ? storedUserName : await askForUserName();
+  return isNonEmptyString(userName) ? userName : null;
 }
 
 /**
@@ -212,7 +249,7 @@ function printRoomName(roomName) {
  */
 function askForUserName() {
   return swal({
-    title: 'Now write your name',
+    title: 'Please enter your name',
     text: 'Or leave it blank to enter as anonymous.',
     content: 'input',
     closeOnClickOutside: false,

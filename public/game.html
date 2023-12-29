@@ -4,8 +4,15 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- RESET -->
-    <link href="./styles/reset.css" rel="stylesheet" />
+    <meta
+      name="application-name"
+      content="Planning Poker: Online Scrum planning poker for Agile project teams"
+    />
+    <meta
+      name="description"
+      content="Discover Planning Poker, an innovative online app facilitating Agile project teams in easy project estimation.
+      Sign up in one click and enjoy the benefits of this always-free tool today!"
+    />
     <!-- BOOTSTRAP -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
@@ -38,7 +45,7 @@
             </button>
 
             <div class="d-flex flex-wrap align-items-center me-3">
-              <div class="dropdown text-end">
+              <div class="dropdown">
                 <a
                   href="#"
                   class="d-block link-dark text-decoration-none dropdown-toggle"
@@ -56,14 +63,18 @@
                 <ul class="dropdown-menu text-small">
                   <li>
                     <a class="dropdown-item">
-                      <strong id="player-name-menu-item">Player name</strong>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <strong id="player-name-menu-item">Player name</strong>
+                        <span id="btnEditName" data-feather="edit-3" class="icon-edit"></span>
+                      </div>
                     </a>
                   </li>
                   <li><hr class="dropdown-divider" /></li>
                   <li>
-                    <a class="dropdown-item" id="btnLogOut" href="#"
-                      >Sign out</a
-                    >
+                    <a class="dropdown-item disabled" id="btnStartModerating" href="#">Start Moderating</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" id="btnLogOut" href="#">Sign out</a>
                   </li>
                 </ul>
               </div>
@@ -80,9 +91,6 @@
 
         <!-- PANEL CARDS -->
         <div class="panel-cards mb-3">
-          <!-- <div class="me-3 fs-6 mb-3" style="width: 90%;">
-            Voting: [ACS] Nova versão do Java para rodar dentro do servidor de aplicações Wildfly 27
-          </div> -->
           <div class="cards-container">
             <button class="card">
               <div class="left-icon">1</div>

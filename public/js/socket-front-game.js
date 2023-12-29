@@ -117,9 +117,21 @@ function emitDisconnectPlayer(roomId, userId) {
   socket.emit('disconnect_player', roomId, userId);
 }
 
+/**
+ * Emits an 'update_player_name' event to the server with the provided data.
+ *
+ * @param {Object} data - The data to be sent with the 'update_player_name' event.
+ *
+ * @return {void} - This function does not return any value.
+ */
+function emitUpdatePlayerName(data) {
+  socket.emit('update_player_name', data);
+}
+
 export {
   emitConnectWithRoom,
   emitGetPlayers,
   emitCheckRoomAvailability,
   emitDisconnectPlayer,
+  emitUpdatePlayerName,
 };
