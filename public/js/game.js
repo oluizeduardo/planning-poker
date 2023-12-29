@@ -310,10 +310,10 @@ function redirectToIndex() {
  * @return {void} This function does not return a value.
  */
 function addPlayerNameOnTheList(users) {
-  let html = '';
+  playersList.innerHTML = '';
   users.forEach((user) => {
     const {userId, userName} = user;
-    html += `
+    playersList.innerHTML += `
       <li id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
           <img class="avatar me-2" src="https://api.dicebear.com/7.x/bottts/svg?seed=${userName}" alt="Avatar">
@@ -324,7 +324,6 @@ function addPlayerNameOnTheList(users) {
         </h5>
       </li>`;
   });
-  playersList.innerHTML = html;
 }
 
 /**
