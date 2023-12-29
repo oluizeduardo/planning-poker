@@ -52,17 +52,19 @@ btnInvitePlayers.addEventListener('click', (e) => {
 });
 
 // UPDATE PLAYER'S NAME
-btnEditPlayerName.addEventListener('click', async (e) => {
-  try {
-    const newName = await askForUserName() || 'Anonymous';
-    const userData = getUserData();
-    const {userId, roomId} = userData;
-    const updatedData = {userId, roomId, newName};
-    saveUserData({...userData, userName: newName});
-    emitUpdatePlayerName(updatedData);
-  } catch (error) {
-    console.error('An error occurred while updating the player name:', error);
-  }
+btnEditPlayerName.addEventListener('click', () => {
+  askForUserName()
+    .then((userInput) => {
+      const newName = userInput || 'Anonymous';
+      const userData = getUserData();
+      const {userId, roomId} = userData;
+      const updatedData = {userId, roomId, newName};
+      saveUserData({...userData, userName: newName});
+      emitUpdatePlayerName(updatedData);
+    })
+    .catch((error) => {
+      console.error('An error occurred while updating the player name:', error);
+    });
 });
 
 /**
@@ -104,19 +106,21 @@ function removePlayerFromList(userId) {
 }
 
 /**
- * Connects to a specified room, checking its availability
- * and handling the connection process.
- *
+ * Connects to the specified room after checking its availability.
  * @param {string} roomId - The identifier of the room to connect to.
- * @return {void}
  */
-async function connectInTheRoom(roomId) {
-  const room = await checkRoomAvailability(roomId);
-  if (room) {
-    handleRoomAvailable(roomId);
-  } else {
-    handleRoomNotAvailable();
-  }
+function connectInTheRoom(roomId) {
+  checkRoomAvailability(roomId)
+    .then((room) => {
+      if (room) {
+        handleRoomAvailable(roomId);
+      } else {
+        handleRoomNotAvailable();
+      }
+    })
+    .catch((error) => {
+      console.error('An error occurred while checking room availability:', error);
+    });
 }
 
 /**
