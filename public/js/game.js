@@ -256,7 +256,12 @@ function askForUserName() {
   return swal({
     title: 'Please enter your name',
     text: 'Or leave it blank to enter as anonymous.',
-    content: 'input',
+    content: {
+      element: 'input',
+      attributes: {
+        placeholder: 'Type your name',
+      },
+    },
     closeOnClickOutside: false,
     closeOnEsc: false,
     buttons: {

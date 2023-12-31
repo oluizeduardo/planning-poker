@@ -21,12 +21,13 @@
       crossorigin="anonymous"
     />
     <link href="./styles/game.css" rel="stylesheet" />
+    <script src="./js/darkMode.js" type="module"></script>
     <title>Planning Poker | Game</title>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <header class="bg-light d-flex">
+    <header id="el_header" class="bg-light d-flex">
       <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between">
           <!-- ROOM'S NAME -->
@@ -63,9 +64,7 @@
                 <ul class="dropdown-menu text-small">
                   <li>
                     <a class="dropdown-item">
-                      <div
-                        class="d-flex align-items-center justify-content-between"
-                      >
+                      <div class="d-flex align-items-center justify-content-between">
                         <strong id="player-name-menu-item">Player name</strong>
                         <span
                           id="btnEditName"
@@ -77,17 +76,22 @@
                   </li>
                   <li><hr class="dropdown-divider" /></li>
                   <li>
+                    <a class="dropdown-item">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <label class="form-check-label" for="checkDarkMode">Dark mode</label>
+                        <input class="form-check-input mt-0 ms-5" type="checkbox" id="checkDarkMode">
+                      </div>
+                    </a>
+                  </li>
+                  <li>
                     <a
                       class="dropdown-item disabled"
                       id="btnStartModerating"
-                      href="#"
-                      >Start Moderating</a
-                    >
+                      href="#">Start Moderating
+                    </a>
                   </li>
                   <li>
-                    <a class="dropdown-item" id="btnLogOut" href="#"
-                      >Sign out</a
-                    >
+                    <a class="dropdown-item" id="btnLogOut" href="#">Sign out</a>
                   </li>
                 </ul>
               </div>
@@ -227,6 +231,6 @@
     <!-- SWEETALERT -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <script src="./js/game.js" type="module"></script>
+    <script src="./js/game.js" type="module"></script>    
   </body>
 </html>

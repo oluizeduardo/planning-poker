@@ -2,6 +2,10 @@ body {
   background-color: #eaeff6; 
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100vh;
+  transition: background 0.1s linear;
+}
+body.dark {
+  background-color: #232c35
 }
 .avatar {
   width: 28.6px;
@@ -11,6 +15,10 @@ header {
   margin-bottom: 40px;
   padding: 1rem;
   background-color: rgba(51, 51, 51, 1);
+  transition: background 0.1s linear;
+}
+header.dark {
+  background-color: #232c35
 }
 .panel-cards {
   display: flex;
