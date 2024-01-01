@@ -1,11 +1,15 @@
 body {
-  background-color: #eaeff6; 
+  background-color: #eaeff6;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100vh;
   transition: background 0.1s linear;
 }
 body.dark {
-  background-color: #232c35
+  /* background-color: #232c35 */
+  background-color: #0d1117;
+}
+.header-bg-dark {
+  background-color: #24292f;
 }
 .avatar {
   width: 28.6px;
@@ -18,7 +22,7 @@ header {
   transition: background 0.1s linear;
 }
 header.dark {
-  background-color: #232c35
+  background-color: #232c35;
 }
 .panel-cards {
   display: flex;
@@ -96,12 +100,12 @@ button {
   display: none;
   z-index: 1000;
 }
-.icon-edit{
+.icon-edit {
   width: 16px;
   height: 16px;
   margin-left: 10px;
 }
-.icon-edit:hover{
+.icon-edit:hover {
   cursor: pointer;
 }
 @media (min-width: 1300px) {
@@ -122,7 +126,7 @@ button {
   .cards-container {
     width: 100%;
   }
-  .btn-text-visibility{
+  .btn-text-visibility {
     display: none;
   }
   .card {
@@ -141,7 +145,7 @@ button {
   .panel-cards {
     width: 100%;
   }
-  .custom-alert {    
+  .custom-alert {
     right: 20px;
   }
 }
