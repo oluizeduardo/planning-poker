@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import {BACKGROUND_MODE_DARK, CLASS_BG_DARK_THEME_LIGHT, CLASS_TEXT_WHITE, getBackgroundMode} from './darkMode.js';
 import {
   emitCheckRoomAvailability,
   emitConnectWithRoom,
@@ -316,13 +317,24 @@ function redirectToIndex() {
  */
 function addPlayerNameOnTheList(users) {
   playersList.innerHTML = '';
+
+  const backgroundMode = getBackgroundMode();
+
   users.forEach((user) => {
     const {userId, userName} = user;
+    let backgroundColor = '';
+    let textColor = '';
+
+    if (backgroundMode === BACKGROUND_MODE_DARK) {
+      backgroundColor = CLASS_BG_DARK_THEME_LIGHT;
+      textColor = CLASS_TEXT_WHITE;
+    }
+
     playersList.innerHTML += `
-      <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
+      <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center ${backgroundColor}">
         <div class="d-flex align-items-center">
           <img class="avatar me-2" src="https://api.dicebear.com/7.x/bottts/svg?seed=${userName}" alt="Avatar">
-          <h6 class="my-0">${userName}</h6>    
+          <h6 class="list-item-player-name my-0 ${textColor}">${userName}</h6>    
         </div>
         <h5>
           <strong class="pe-3"></strong>

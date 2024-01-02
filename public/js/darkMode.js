@@ -4,50 +4,80 @@ const headerElement = document.getElementById('el_header');
 const roomName = document.getElementById('room-name');
 const cards = document.querySelectorAll('.card');
 const centerIcons = document.querySelectorAll('.center-icon');
-const listGroupItens = document.querySelectorAll('.list-group-item');
 
 const SESSION_STORAGE_NAME = 'backgroundMode';
+const BACKGROUND_MODE_DARK = 'dark';
+const BACKGROUND_MODE_LIGHT = 'light';
+
+const CLASS_TEXT_MUTED = 'text-muted';
+const CLASS_TEXT_WHITE = 'text-white';
+const CLASS_DARK = 'dark';
+const CLASS_BG_LIGHT = 'bg-light';
+const CLASS_BG_DARK_THEME_LIGHT = 'bg-dark-theme-light';
 
 const backgroundMode = getBackgroundMode();
 
 if (backgroundMode) {
-  document.body.classList.toggle('dark', backgroundMode === 'dark');
-  headerElement.classList.toggle('bg-light', backgroundMode === 'light');
-  headerElement.classList.toggle('bg-dark-theme-light', backgroundMode === 'dark');
-  roomName.classList.toggle('text-white', backgroundMode === 'dark');
+  document.body.classList.toggle(
+    CLASS_DARK,
+    backgroundMode === BACKGROUND_MODE_DARK,
+  );
+  headerElement.classList.toggle(
+    CLASS_BG_LIGHT,
+    backgroundMode === BACKGROUND_MODE_LIGHT,
+  );
+  headerElement.classList.toggle(
+    CLASS_BG_DARK_THEME_LIGHT,
+    backgroundMode === BACKGROUND_MODE_DARK,
+  );
+  roomName.classList.toggle(
+    CLASS_TEXT_WHITE,
+    backgroundMode === BACKGROUND_MODE_DARK,
+  );
 
   cards.forEach((item) => {
-    item.classList.toggle('bg-dark-theme-light', backgroundMode === 'dark');
+    item.classList.toggle(
+      CLASS_BG_DARK_THEME_LIGHT,
+      backgroundMode === BACKGROUND_MODE_DARK,
+    );
   });
   centerIcons.forEach((item) => {
-    item.classList.toggle('text-muted', backgroundMode === 'dark');
-  });
-  listGroupItens.forEach((item) => {
-    item.classList.toggle('bg-dark-theme-light', backgroundMode === 'dark');
+    item.classList.toggle(
+      CLASS_TEXT_MUTED,
+      backgroundMode === BACKGROUND_MODE_DARK,
+    );
   });
 
-  if (backgroundMode === 'dark') {
+  document.querySelectorAll('.list-group-item').forEach((item) => {
+    item.classList.toggle(
+      CLASS_BG_DARK_THEME_LIGHT,
+      backgroundMode === BACKGROUND_MODE_DARK,
+    );
+  });
+
+  if (backgroundMode === BACKGROUND_MODE_DARK) {
     checkDarkMode.checked = true;
   }
 }
 
 checkDarkMode.addEventListener('change', () => {
-  document.body.classList.toggle('dark');
-  headerElement.classList.toggle('bg-light');
-  headerElement.classList.toggle('bg-dark-theme-light');
-  roomName.classList.toggle('text-white');
+  document.body.classList.toggle(CLASS_DARK);
+  headerElement.classList.toggle(CLASS_BG_LIGHT);
+  headerElement.classList.toggle(CLASS_BG_DARK_THEME_LIGHT);
+  roomName.classList.toggle(CLASS_TEXT_WHITE);
 
   cards.forEach((item) => {
-    item.classList.toggle('bg-dark-theme-light');
+    item.classList.toggle(CLASS_BG_DARK_THEME_LIGHT);
   });
   centerIcons.forEach((item) => {
-    item.classList.toggle('text-muted');
-  });
-  listGroupItens.forEach((item) => {
-    item.classList.toggle('bg-dark-theme-light');
+    item.classList.toggle(CLASS_TEXT_MUTED);
   });
 
-  const newMode = document.body.classList.contains('dark') ? 'dark' : 'light';
+  changeBackgroundThemeMenuItems();
+
+  const newMode = document.body.classList.contains(CLASS_DARK) ?
+    BACKGROUND_MODE_DARK :
+    BACKGROUND_MODE_LIGHT;
   setBackgroundMode(newMode);
 });
 
@@ -70,3 +100,27 @@ function getBackgroundMode() {
 function setBackgroundMode(newMode) {
   sessionStorage.setItem(SESSION_STORAGE_NAME, newMode);
 }
+
+/**
+ * Changes the background theme of menu items in a list group
+ * by toggling the 'bg-dark-theme-light' class.
+ * @return {void}
+ */
+function changeBackgroundThemeMenuItems() {
+  const groupItens = document.querySelectorAll('.list-group-item');
+  const playersNames = document.querySelectorAll('.list-item-player-name');
+
+  groupItens.forEach((item) => {
+    item.classList.toggle(CLASS_BG_DARK_THEME_LIGHT);
+  });
+  playersNames.forEach((item) => {
+    item.classList.toggle(CLASS_TEXT_WHITE);
+  });
+}
+
+export {
+  getBackgroundMode,
+  BACKGROUND_MODE_DARK,
+  CLASS_TEXT_WHITE,
+  CLASS_BG_DARK_THEME_LIGHT,
+};
