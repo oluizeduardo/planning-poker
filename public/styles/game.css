@@ -5,10 +5,9 @@ body {
   transition: background 0.1s linear;
 }
 body.dark {
-  /* background-color: #232c35 */
   background-color: #0d1117;
 }
-.header-bg-dark {
+.bg-dark-theme-light {
   background-color: #24292f;
 }
 .avatar {
@@ -18,11 +17,7 @@ body.dark {
 header {
   margin-bottom: 40px;
   padding: 1rem;
-  background-color: rgba(51, 51, 51, 1);
   transition: background 0.1s linear;
-}
-header.dark {
-  background-color: #232c35;
 }
 .panel-cards {
   display: flex;
@@ -48,7 +43,6 @@ header.dark {
   padding: 5px;
   width: 133px;
   height: 160px;
-  background-color: #fff;
   border-radius: 4px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.123);
   transition: box-shadow 0.3s ease;
@@ -69,13 +63,11 @@ header.dark {
   width: 75%;
   height: 120px;
   font-size: 46px;
-  color: black;
   border: 1px solid #d5d9de;
   border-radius: 4px;
   border-width: thin;
   margin-left: 16px;
   margin-right: 16px;
-  font-weight: 300;
   display: flex;
   align-items: center;
   justify-content: center;

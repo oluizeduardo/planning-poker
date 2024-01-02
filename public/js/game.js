@@ -319,7 +319,7 @@ function addPlayerNameOnTheList(users) {
   users.forEach((user) => {
     const {userId, userName} = user;
     playersList.innerHTML += `
-      <li id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
+      <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
           <img class="avatar me-2" src="https://api.dicebear.com/7.x/bottts/svg?seed=${userName}" alt="Avatar">
           <h6 class="my-0">${userName}</h6>    
@@ -327,7 +327,7 @@ function addPlayerNameOnTheList(users) {
         <h5>
           <strong class="pe-3"></strong>
         </h5>
-      </li>`;
+      </div>`;
   });
 }
 
