@@ -45,12 +45,13 @@ header {
   height: 160px;
   border-radius: 4px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.123);
-  transition: box-shadow 0.3s ease;
-  font-family: Lato, sans-serif;
 }
 .card:hover {
-  border: 2px solid #4b9ae84b;
-  background-color: rgba(227, 234, 241, 0.212);
+  border: 1px solid #4b9ae84b;
+  transform: scale(1.05);
+}
+.card:active {
+  background: rgb(143, 151, 155);
 }
 .left-icon {
   align-self: flex-start;
@@ -78,6 +79,9 @@ header {
   padding: 3px;
   transform: rotate(-180deg);
 }
+.white-shadow {
+  box-shadow: 3px 3px 3px rgba(253, 253, 253, 0.123);
+}
 button {
   cursor: pointer;
 }
@@ -96,8 +100,18 @@ button {
   width: 16px;
   height: 16px;
   margin-left: 10px;
+  cursor: pointer;
 }
-.icon-edit:hover {
+#btnStartModerating{
+  cursor: pointer;
+}
+#pnBtnReviewEstimates{
+  width: 20%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.icon-game-control{
+  font-size: 22px;
   cursor: pointer;
 }
 @media (min-width: 1300px) {
@@ -139,5 +153,10 @@ button {
   }
   .custom-alert {
     right: 20px;
+  }
+  #pnBtnReviewEstimates{
+    width: 90%;
+    margin-top: 0px;
+    margin-bottom: 10px;
   }
 }

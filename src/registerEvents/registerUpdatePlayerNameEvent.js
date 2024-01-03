@@ -34,7 +34,7 @@ function handleUpdatePlayerName(data, io) {
   if (user) {
     user.userName = data.newName;
     const users = getUsers(data.roomId);
-    io.to(data.roomId).emit('add_player_list', user, users);
+    io.to(data.roomId).emit('update_players_list', user, users);
   }
 }
 

@@ -9,11 +9,11 @@ const SESSION_STORAGE_NAME = 'backgroundMode';
 const BACKGROUND_MODE_DARK = 'dark';
 const BACKGROUND_MODE_LIGHT = 'light';
 
-const CLASS_TEXT_MUTED = 'text-muted';
 const CLASS_TEXT_WHITE = 'text-white';
 const CLASS_DARK = 'dark';
 const CLASS_BG_LIGHT = 'bg-light';
 const CLASS_BG_DARK_THEME_LIGHT = 'bg-dark-theme-light';
+const CLASS_WHITE_SHADOW = 'white-shadow';
 
 const backgroundMode = getBackgroundMode();
 
@@ -40,10 +40,14 @@ if (backgroundMode) {
       CLASS_BG_DARK_THEME_LIGHT,
       backgroundMode === BACKGROUND_MODE_DARK,
     );
+    item.classList.toggle(
+      CLASS_WHITE_SHADOW,
+      backgroundMode === BACKGROUND_MODE_DARK,
+    );
   });
   centerIcons.forEach((item) => {
     item.classList.toggle(
-      CLASS_TEXT_MUTED,
+      CLASS_TEXT_WHITE,
       backgroundMode === BACKGROUND_MODE_DARK,
     );
   });
@@ -68,9 +72,10 @@ checkDarkMode.addEventListener('change', () => {
 
   cards.forEach((item) => {
     item.classList.toggle(CLASS_BG_DARK_THEME_LIGHT);
+    item.classList.toggle(CLASS_WHITE_SHADOW);
   });
   centerIcons.forEach((item) => {
-    item.classList.toggle(CLASS_TEXT_MUTED);
+    item.classList.toggle(CLASS_TEXT_WHITE);
   });
 
   changeBackgroundThemeMenuItems();

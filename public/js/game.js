@@ -1,10 +1,14 @@
 /* eslint-disable max-len */
-import {BACKGROUND_MODE_DARK, CLASS_BG_DARK_THEME_LIGHT, CLASS_TEXT_WHITE, getBackgroundMode} from './darkMode.js';
+import {
+  BACKGROUND_MODE_DARK,
+  CLASS_BG_DARK_THEME_LIGHT,
+  CLASS_TEXT_WHITE,
+  getBackgroundMode,
+} from './darkMode.js';
 import {
   emitCheckRoomAvailability,
   emitConnectWithRoom,
   emitDisconnectPlayer,
-  emitGetPlayers,
   emitUpdatePlayerName,
 } from './socket-front-game.js';
 import {
@@ -24,7 +28,6 @@ window.addEventListener('load', () => {
   const roomId = getRoomId();
   if (roomId) {
     connectInTheRoom(roomId);
-    emitGetPlayers(roomId);
   } else {
     redirectToIndex();
   }
@@ -121,7 +124,10 @@ function connectInTheRoom(roomId) {
       }
     })
     .catch((error) => {
-      console.error('An error occurred while checking room availability:', error);
+      console.error(
+        'An error occurred while checking room availability:',
+        error,
+      );
     });
 }
 
@@ -153,6 +159,7 @@ async function handleRoomAvailable(roomId) {
 
     const userData = {
       roomId: roomId || getRoomId(),
+      isModerator: !!storedData.isModerator,
       connection: {
         userName: userName || 'Anonymous',
       },
@@ -177,7 +184,9 @@ async function handleRoomAvailable(roomId) {
  * @throws {Error} Throws an error if there is an issue with obtaining the user name.
  */
 async function getValidUserName(storedUserName) {
-  const userName = isNonEmptyString(storedUserName) ? storedUserName : await askForUserName();
+  const userName = isNonEmptyString(storedUserName) ?
+    storedUserName :
+    await askForUserName();
   return isNonEmptyString(userName) ? userName : null;
 }
 
@@ -198,13 +207,7 @@ function isNonEmptyString(input) {
  * @return {void}
  */
 function handleRoomNotAvailable() {
-  swal({
-    title: 'Room not available!',
-    text: 'Please check the room\'s code.',
-    icon: 'info',
-  }).then(() => {
-    redirectToIndex();
-  });
+  showRoomNotAvailableMessage('Please check the room\'s code.');
 }
 
 /**
@@ -306,41 +309,42 @@ function redirectToIndex() {
 }
 
 /**
- * Adds a player's name to the player list in the HTML.
+ * Clears the existing content of the playersList element and
+ * adds player names to the list.
  *
- * This function appends a new list item to the player list with the specified
- * user name and user ID, creating a visual representation of the player.
- *
- * @param {string} users - A list of users.
- * @param {string} userId - The unique identifier for the player.
- * @return {void} This function does not return a value.
+ * @param {Array<Object>} users - An array of user objects containing
+ * userId and userName.
+ * @return {void}
  */
 function addPlayerNameOnTheList(users) {
   playersList.innerHTML = '';
 
   const backgroundMode = getBackgroundMode();
+  const darkThemeClasses = {
+    backgroundColor:
+      backgroundMode === BACKGROUND_MODE_DARK ? CLASS_BG_DARK_THEME_LIGHT : '',
+    textColor: backgroundMode === BACKGROUND_MODE_DARK ? CLASS_TEXT_WHITE : '',
+  };
 
-  users.forEach((user) => {
-    const {userId, userName} = user;
-    let backgroundColor = '';
-    let textColor = '';
+  playersList.innerHTML = users
+    .map(({userId, userName}) => {
+      const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${userName}`;
 
-    if (backgroundMode === BACKGROUND_MODE_DARK) {
-      backgroundColor = CLASS_BG_DARK_THEME_LIGHT;
-      textColor = CLASS_TEXT_WHITE;
-    }
-
-    playersList.innerHTML += `
-      <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center ${backgroundColor}">
+      return `
+      <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center ${darkThemeClasses.backgroundColor}">
         <div class="d-flex align-items-center">
-          <img class="avatar me-2" src="https://api.dicebear.com/7.x/bottts/svg?seed=${userName}" alt="Avatar">
-          <h6 class="list-item-player-name my-0 ${textColor}">${userName}</h6>    
+          <img class="avatar me-2" src="${avatarUrl}" alt="Avatar">
+          <h6 class="list-item-player-name my-0 ${darkThemeClasses.textColor}">${userName}</h6>
+          <span class="ms-2 icon-game-control invisible" data-bs-toggle="tooltip" title="This player is a moderator">
+            &#127918;
+          </span>
         </div>
         <h5>
           <strong class="pe-3"></strong>
         </h5>
       </div>`;
-  });
+    })
+    .join('');
 }
 
 /**
@@ -386,11 +390,28 @@ function showAlertMessage(message) {
   }, 2700);
 }
 
+/**
+ * Displays a warning message indicating that the room is not available.
+ * @param {string} text - The additional text to be displayed in the message.
+ * @return {void}
+ */
+function showRoomNotAvailableMessage(text) {
+  clearStorage();
+  swal({
+    title: 'Room not available!',
+    text: text,
+    icon: 'warning',
+  }).then(() => {
+    redirectToIndex();
+  });
+}
+
 export {
   addPlayerNameOnTheList,
   redirectToIndex,
   showMessageNewPlayerOnline,
   removePlayerFromList,
   showMessagePlayerDisconnected,
+  showRoomNotAvailableMessage,
   printPlayerNameInProfileMenu,
 };

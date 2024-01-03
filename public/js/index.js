@@ -1,9 +1,14 @@
 import {emitCreateRoom, redirectToTheGame} from './socket-front-index.js';
+import {clearStorage} from './userSessionStorage.js';
 
 const form = document.getElementById('form-add-room');
 const inputRoomName = document.getElementById('input-room-name');
 const selectVotingSystem = document.getElementById('select-voting-system');
 const linkConnectRoom = document.getElementById('linkConnectRoom');
+
+window.addEventListener('load', () => {
+  clearStorage();
+});
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();

@@ -54,12 +54,13 @@ function handleConnectRoom(socket, io, newConnection, callback) {
     // Log information about the room size.
     logRoomSizeStatus(roomId);
 
+    // Get list of users/players in the room.
     const users = getUsers(roomId);
 
-    // Emit event to update the list of players.
-    io.to(roomId).emit('add_player_list', user, users);
+    // Emit event to update the list of players in the frontend.
+    io.to(roomId).emit('update_players_list', user, users);
 
-    // Invoke the callback with the found room
+    // Invoke the callback with the found room.
     callback(foundRoom);
   } else {
     // Log a warning if an attempt is made to join a non-existent room

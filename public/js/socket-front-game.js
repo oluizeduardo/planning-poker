@@ -1,32 +1,25 @@
 /* eslint-disable max-len */
 import {
   addPlayerNameOnTheList,
-  printPlayerNameInProfileMenu,
-  redirectToIndex,
   removePlayerFromList,
   showMessageNewPlayerOnline,
   showMessagePlayerDisconnected,
+  showRoomNotAvailableMessage,
 } from './game.js';
-import {clearStorage, getUserData} from './userSessionStorage.js';
 
 const socket = io();
 
 socket.on('disconnect', () => {
-  swal({
-    title: 'Room not available',
-    text: 'You are disconnected from this room.',
-    icon: 'warning',
-  }).then(() => {
-    redirectToIndex();
-    clearStorage();
-  });
+  showRoomNotAvailableMessage('You are disconnected from this room.');
 });
 
-socket.on('add_player_list', (newUser, users) => {
+// Emitted by the server to update the list of players in the frontend.
+socket.on('update_players_list', (newUser, users) => {
   addPlayerNameOnTheList(users);
   showMessageNewPlayerOnline(newUser.userName);
 });
 
+// Emitted by the server to remove a specific user from the list.
 socket.on('remove_player_list', (user) => {
   removePlayerFromList(user.userId);
   showMessagePlayerDisconnected(user.userName);
@@ -49,42 +42,19 @@ function emitConnectWithRoom(newConnection, callback) {
         `Client connected with success in the room [${newConnection.roomId}]`,
       );
 
+      // Object to save in session storage.
       const newConnectionResponseData = {
         userName: newConnection.connection.userName,
         userId: socket.id,
         roomName: foundRoom.roomName,
         roomId: foundRoom.roomId,
+        isModerator: newConnection.isModerator,
       };
 
       callback(newConnectionResponseData);
     } else {
-      swal({
-        title: 'Room not available!',
-        text: 'Please check the room\'s code.',
-        icon: 'info',
-      }).then(() => {
-        window.location.href = '/';
-      });
+      showRoomNotAvailableMessage('Please check the room\'s code.');
     }
-  });
-}
-
-/**
- * Emits a 'get_players' event to the server with the provided roomId,
- * and handles the response by adding player names to a list.
- *
- * @param {string} roomId - The unique identifier of the room to fetch players from.
- * @throws {Error} If the roomId parameter is not a non-empty string.
- */
-function emitGetPlayers(roomId) {
-  socket.emit('get_players', roomId, (players) => {
-    const playerInSession = getUserData();
-    players.forEach((player) => {
-      addPlayerNameOnTheList(player.userName, player.userId);
-      if (player.userId === playerInSession.userId) {
-        printPlayerNameInProfileMenu(player.userName);
-      }
-    });
   });
 }
 
@@ -119,9 +89,7 @@ function emitDisconnectPlayer(roomId, userId) {
 
 /**
  * Emits an 'update_player_name' event to the server with the provided data.
- *
  * @param {Object} data - The data to be sent with the 'update_player_name' event.
- *
  * @return {void} - This function does not return any value.
  */
 function emitUpdatePlayerName(data) {
@@ -130,7 +98,6 @@ function emitUpdatePlayerName(data) {
 
 export {
   emitConnectWithRoom,
-  emitGetPlayers,
   emitCheckRoomAvailability,
   emitDisconnectPlayer,
   emitUpdatePlayerName,
