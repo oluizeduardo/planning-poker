@@ -5,6 +5,7 @@ import {
   CLASS_TEXT_WHITE,
   getBackgroundMode,
 } from './darkMode.js';
+import {changePanelVisibility, changeTextInMenuItem} from './gameControl.js';
 import {
   emitCheckRoomAvailability,
   emitConnectWithRoom,
@@ -224,6 +225,23 @@ function processesBasicSettings(data) {
   saveUserData(data);
   printRoomName(data.roomName);
   printPlayerNameInProfileMenu(data.userName);
+  adjustComponentsForModerator(data.isModerator);
+}
+
+/**
+ * Adjusts components based on the moderator status.
+ *
+ * If the user is a moderator, this function changes the text in a menu item
+ * to 'Stop Moderating' and adjusts the visibility of a panel.
+ *
+ * @param {boolean} isModerator - A boolean indicating whether the user is a moderator.
+ * @return {void}
+ */
+function adjustComponentsForModerator(isModerator) {
+  if (isModerator) {
+    changeTextInMenuItem('Stop Moderating');
+    changePanelVisibility();
+  }
 }
 
 /**
@@ -327,15 +345,16 @@ function addPlayerNameOnTheList(users) {
   };
 
   playersList.innerHTML = users
-    .map(({userId, userName}) => {
+    .map(({userId, userName, isModerator}) => {
       const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${userName}`;
+      const classVisibility = isModerator ? '' : 'invisible';
 
       return `
       <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center ${darkThemeClasses.backgroundColor}">
         <div class="d-flex align-items-center">
-          <img class="avatar me-2" src="${avatarUrl}" alt="Avatar">
+          <img class="avatar me-2" src="${avatarUrl}" alt="">
           <h6 class="list-item-player-name my-0 ${darkThemeClasses.textColor}">${userName}</h6>
-          <span class="ms-2 icon-game-control invisible" data-bs-toggle="tooltip" title="This player is a moderator">
+          <span class="ms-2 icon-game-control ${classVisibility}" data-bs-toggle="tooltip" title="This player is a moderator">
             &#127918;
           </span>
         </div>

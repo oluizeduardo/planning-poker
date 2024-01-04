@@ -105,10 +105,10 @@ button {
 #btnStartModerating{
   cursor: pointer;
 }
-#pnBtnReviewEstimates{
+.pnBtnReviewEstimates{
   width: 20%;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .icon-game-control{
   font-size: 22px;
@@ -154,9 +154,11 @@ button {
   .custom-alert {
     right: 20px;
   }
-  #pnBtnReviewEstimates{
+  .pnBtnReviewEstimates{
     width: 90%;
-    margin-top: 0px;
-    margin-bottom: 10px;
+    margin-top: 0px;  
+  }
+  .btn-review-estimates{    
+    margin-bottom: 30px;
   }
 }

@@ -13,14 +13,20 @@ btnStartModerating.addEventListener('click', () => {
 });
 
 /**
- * Changes the text content of a menu item button between
- * 'Start Moderating' and 'Stop Moderating'.
+ * Changes the text content of a menu item/button and toggles between
+ * 'Start Moderating' and 'Stop Moderating' if no new text is provided.
+ *
+ * @param {string} [newText] - The new text to set for the menu item/button.
+ *                             If not provided, toggles between 'Start Moderating'
+ *                             and 'Stop Moderating'.
  * @return {void}
  */
-function changeTextInMenuItem() {
+function changeTextInMenuItem(newText) {
   const buttonText = btnStartModerating.innerText;
-  const newText =
+  if (!newText) {
+    newText =
     buttonText === 'Start Moderating' ? 'Stop Moderating' : 'Start Moderating';
+  }
   btnStartModerating.innerText = newText;
 }
 
@@ -62,3 +68,8 @@ function updateUserDataSessionStorage(user) {
   };
   saveUserData(updatedUser);
 }
+
+export {
+  changeTextInMenuItem,
+  changePanelVisibility,
+};

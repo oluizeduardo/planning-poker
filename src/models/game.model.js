@@ -3,6 +3,7 @@ const rooms = [
   {
     roomId: '0000000000000000000',
     roomName: 'Test Room',
+    isModerator: false,
     connections: [
       {
         userId: '1111111111',
