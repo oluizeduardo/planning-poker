@@ -14,9 +14,11 @@ socket.on('disconnect', () => {
 });
 
 // Emitted by the server to update the list of players in the frontend.
-socket.on('update_players_list', (newUser, users) => {
+socket.on('update_players_list', (newUser, users, showAlertMessage = true) => {
   addPlayerNameOnTheList(users);
-  showMessageNewPlayerOnline(newUser.userName);
+  if (showAlertMessage) {
+    showMessageNewPlayerOnline(newUser.userName);
+  }
 });
 
 // Emitted by the server to remove a specific user from the list.
@@ -96,9 +98,20 @@ function emitUpdatePlayerName(data) {
   socket.emit('update_player_name', data);
 }
 
+/**
+ * Emits a 'update_user_moderator' event through the socket to make a user a moderator.
+ * @param {Object} user - The user object to be made a moderator.
+ */
+function emitUpdateUserModeratorStatus(user) {
+  if (user) {
+    socket.emit('update_user_moderator_status', user);
+  }
+}
+
 export {
   emitConnectWithRoom,
   emitCheckRoomAvailability,
   emitDisconnectPlayer,
   emitUpdatePlayerName,
+  emitUpdateUserModeratorStatus,
 };

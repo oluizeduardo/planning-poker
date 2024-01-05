@@ -1,15 +1,20 @@
 /* eslint-disable max-len */
+import {emitUpdateUserModeratorStatus} from './socket-front-game.js';
 import {getUserData, saveUserData} from './userSessionStorage.js';
 
 const pnBtnReviewEstimates = document.getElementById('pnBtnReviewEstimates');
-const btnStartModerating = document.getElementById('btnStartModerating');
+const btnStartStopModerating = document.getElementById('btnStartModerating');
 
-btnStartModerating.addEventListener('click', () => {
+btnStartStopModerating.addEventListener('click', () => {
   const user = getUserData();
   changeTextInMenuItem();
   changePanelVisibility();
-  showVideoGameControlIcon(user.userId);
-  updateUserDataSessionStorage(user);
+  const updatedUser = {
+    ...user,
+    isModerator: !user.isModerator,
+  };
+  saveUserData(updatedUser);
+  emitUpdateUserModeratorStatus(updatedUser);
 });
 
 /**
@@ -36,37 +41,6 @@ function changeTextInMenuItem(newText) {
  */
 function changePanelVisibility() {
   pnBtnReviewEstimates.classList.toggle('invisible');
-}
-
-/**
- * Toggles the visibility of a video game control icon
- * within a menu item based on the user ID.
- *
- * @param {string} userId - The unique identifier of the user
- * associated with the menu item.
- * @return {void}
- */
-function showVideoGameControlIcon(userId) {
-  if (userId) {
-    const menuItem = document.getElementById(userId);
-    const span = menuItem.querySelector('span');
-    span.classList.toggle('invisible');
-  }
-}
-
-/**
- * Updates user data, toggles the 'isModerator' property,
- * and saves the updated data to sessionStorage.
- *
- * @param {Object} user - The user data object to be updated.
- * @return {void}
- */
-function updateUserDataSessionStorage(user) {
-  const updatedUser = {
-    ...user,
-    isModerator: !user.isModerator,
-  };
-  saveUserData(updatedUser);
 }
 
 export {

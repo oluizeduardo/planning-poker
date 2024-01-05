@@ -6,6 +6,7 @@ import registerDisconnectEvent from './registerEvents/registerDisconnectEvent.js
 import registerDisconnectPlayerEvent from './registerEvents/registerDisconnectPlayerEvent.js';
 import registerCheckRoomAvailabilityEvent from './registerEvents/registerCheckRoomAvailabilityEvent.js';
 import registerUpdatePlayerNameEvent from './registerEvents/registerUpdatePlayerNameEvent.js';
+import registerUpdateUserModeratorStatus from './registerEvents/registerUpdateUserModeratorStatus.js';
 
 io.on('connection', handleConnection);
 
@@ -21,4 +22,5 @@ function handleConnection(socket) {
   registerDisconnectPlayerEvent(socket, io);
   registerUpdatePlayerNameEvent(socket, io);
   registerDisconnectEvent(socket);
+  registerUpdateUserModeratorStatus(socket, io);
 }
