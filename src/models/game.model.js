@@ -44,16 +44,23 @@ function findById(roomId) {
 }
 
 /**
- * Retrieves the list of user connections in a specified room.
+ * Retrieves the sorted list of connections in a room based on userName.
  *
- * @param {string} roomId - The unique identifier of the room
- * to get user connections from.
- * @return {Array} - An array containing the user connections
- * in the specified room. If the room is not found, an empty array is returned.
+ * @param {string} roomId - The unique identifier of the room.
+ * @return {Array} - An array of connections in the specified room, sorted by userName.
+ *                   If the room does not exist, an empty array is returned.
  */
 function getUsers(roomId) {
   const idx = rooms.findIndex((i) => i.roomId === roomId);
-  if (idx !== -1) return rooms[idx].connections;
+  if (idx !== -1) {
+    // Clone the connections array to avoid modifying the original array
+    const connections = [...rooms[idx].connections];
+
+    // Sort the connections by userName
+    connections.sort((a, b) => a.userName.localeCompare(b.userName));
+
+    return connections;
+  }
   return [];
 }
 
