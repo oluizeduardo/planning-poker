@@ -1,11 +1,15 @@
 /* eslint-disable max-len */
-import {emitUpdateUserModeratorStatus} from './socket-front-game.js';
+import {printRoomName} from './game.js';
+import {emitUpdateRoomName, emitUpdateUserModeratorStatus} from './socket-front-game.js';
 import {getUserData, saveUserData} from './userSessionStorage.js';
 
 const pnBtnReviewEstimates = document.getElementById('pnBtnReviewEstimates');
 const btnStartStopModerating = document.getElementById('btnStartModerating');
 const btnEditRoomName = document.getElementById('btnEditRoomName');
 
+// /////////////////////////////
+// Start/Stop Moderating
+// /////////////////////////////
 btnStartStopModerating.addEventListener('click', () => {
   const user = getUserData();
   changeTextInMenuItem();
@@ -19,11 +23,19 @@ btnStartStopModerating.addEventListener('click', () => {
   emitUpdateUserModeratorStatus(updatedUser);
 });
 
+// /////////////////////////////
+// Edit room's name
+// /////////////////////////////
 btnEditRoomName.addEventListener('click', () => {
   askForRoomName()
-    .then((userInput) => {
-      if (userInput) {
-        alert(userInput);
+    .then((newRoomName) => {
+      if (newRoomName) {
+        const userData = getUserData();
+        const {roomId} = userData;
+        const updateRoomNameObject = {roomId, newRoomName};
+        emitUpdateRoomName(updateRoomNameObject);
+        saveUserData({...userData, roomName: newRoomName});
+        printRoomName(newRoomName);
       }
     })
     .catch((error) => {

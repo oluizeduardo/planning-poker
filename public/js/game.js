@@ -474,4 +474,5 @@ export {
   showMessagePlayerDisconnected,
   showRoomNotAvailableMessage,
   printPlayerNameInProfileMenu,
+  printRoomName,
 };

@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import {
   addPlayerNameOnTheList,
+  printRoomName,
   removePlayerFromList,
   showMessageNewPlayerOnline,
   showMessagePlayerDisconnected,
@@ -25,6 +26,11 @@ socket.on('update_players_list', (newUser, users, showAlertMessage = true) => {
 socket.on('remove_player_list', (user) => {
   removePlayerFromList(user.userId);
   showMessagePlayerDisconnected(user.userName);
+});
+
+// Emitted by the server to update the room's name.
+socket.on('update_room_name', (newRoomName) => {
+  printRoomName(newRoomName);
 });
 
 /**
@@ -108,10 +114,21 @@ function emitUpdateUserModeratorStatus(user) {
   }
 }
 
+/**
+ * Emits a 'update_room_name' event through the socket to change the room's name.
+ * @param {Object} updateRoomNameObject - The object containing the roomId and the new name.
+ */
+function emitUpdateRoomName(updateRoomNameObject) {
+  if (updateRoomNameObject) {
+    socket.emit('update_room_name', updateRoomNameObject);
+  }
+}
+
 export {
   emitConnectWithRoom,
   emitCheckRoomAvailability,
   emitDisconnectPlayer,
   emitUpdatePlayerName,
   emitUpdateUserModeratorStatus,
+  emitUpdateRoomName,
 };
