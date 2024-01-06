@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Luiz Eduardo da Costa">
-    <meta name="keywords" content="Planning, Poker, SCRUM">
+    <meta name="author" content="Luiz Eduardo da Costa" />
+    <meta name="keywords" content="Planning, Poker, SCRUM" />
     <meta
       name="application-name"
       content="Planning Poker: Online Scrum planning poker for Agile project teams"
@@ -22,7 +22,7 @@
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
-    <link href="./styles/game.css" rel="stylesheet" />    
+    <link href="./styles/game.css" rel="stylesheet" />
     <title>Planning Poker | Game</title>
   </head>
 
@@ -32,9 +32,19 @@
       <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between">
           <!-- ROOM'S NAME -->
-          <span>
+          <div class="d-flex align-items-baseline justify-content-between">
             <div id="room-name" class="fw-bold fs-5"></div>
-          </span>
+            <span
+              id="btnEditRoomName"
+              class="icon-edit invisible"
+              data-bs-toggle="tooltip" title="Edit room's name">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
+                fill="none" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                class="feather feather-edit-3">
+                <path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </span>
+          </div>
 
           <div class="d-flex justify-content-center">
             <button
@@ -54,23 +64,26 @@
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                <img
-                  src="./imgs/default-user.JPG"
-                  alt="mdo"
-                  width="32"
-                  height="32"
-                  class="rounded-circle"
-                />
+                  <img
+                    src="./imgs/default-user.JPG"
+                    alt="mdo"
+                    width="32"
+                    height="32"
+                    class="rounded-circle"
+                  />
                 </a>
                 <ul class="dropdown-menu text-small">
                   <li>
                     <a class="dropdown-item">
-                      <div class="d-flex align-items-center justify-content-between">
+                      <div
+                        class="d-flex align-items-center justify-content-between"
+                        data-bs-toggle="tooltip" title="Edit your name"
+                      >
                         <strong id="player-name-menu-item">Player name</strong>
                         <span
                           id="btnEditName"
                           data-feather="edit-3"
-                          class="icon-edit"
+                          class="icon-edit"                          
                         ></span>
                       </div>
                     </a>
@@ -78,21 +91,30 @@
                   <li><hr class="dropdown-divider" /></li>
                   <li>
                     <a class="dropdown-item">
-                      <div class="d-flex align-items-center justify-content-between">
-                        <label class="form-check-label" for="checkDarkMode">Dark mode</label>
-                        <input class="form-check-input mt-0 ms-5" type="checkbox" id="checkDarkMode">
+                      <div
+                        class="d-flex align-items-center justify-content-between"
+                      >
+                        <label class="form-check-label" for="checkDarkMode"
+                          >Dark mode</label
+                        >
+                        <input
+                          class="form-check-input mt-0 ms-5"
+                          type="checkbox"
+                          id="checkDarkMode"
+                        />
                       </div>
                     </a>
                   </li>
                   <li>
-                    <a
-                      class="dropdown-item"
-                      id="btnStartModerating">Start Moderating
+                    <a class="dropdown-item" id="btnStartModerating"
+                      >Start Moderating
                     </a>
                   </li>
                   <li><hr class="dropdown-divider" /></li>
                   <li>
-                    <a class="dropdown-item" id="btnLogOut" href="#">Sign out</a>
+                    <a class="dropdown-item" id="btnLogOut" href="#"
+                      >Sign out</a
+                    >
                   </li>
                 </ul>
               </div>
@@ -207,8 +229,16 @@
       </span>
     </main>
 
-    <span id="pnBtnReviewEstimates" class="d-grid mx-auto invisible pnBtnReviewEstimates">
-      <button class="btn-review-estimates btn btn-primary rounded-pill" type="button">Review Estimates</button>
+    <span
+      id="pnBtnReviewEstimates"
+      class="d-grid mx-auto invisible pnBtnReviewEstimates"
+    >
+      <button
+        class="btn-review-estimates btn btn-primary rounded-pill"
+        type="button"
+      >
+        Review Estimates
+      </button>
     </span>
 
     <!-- BOOTSTRAP -->

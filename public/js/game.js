@@ -5,7 +5,11 @@ import {
   CLASS_TEXT_WHITE,
   getBackgroundMode,
 } from './darkMode.js';
-import {changePanelVisibility, changeTextInMenuItem} from './gameControl.js';
+import {
+  changeEditRoomNameVisibility,
+  changePanelVisibility,
+  changeTextInMenuItem,
+} from './gameControl.js';
 import {
   emitCheckRoomAvailability,
   emitConnectWithRoom,
@@ -58,20 +62,32 @@ btnInvitePlayers.addEventListener('click', (e) => {
 
 // UPDATE PLAYER'S NAME
 btnEditPlayerName.addEventListener('click', () => {
-  askForUserName()
+  askForUserName(true)
     .then((userInput) => {
-      const newName = userInput || 'Anonymous';
-      const userData = getUserData();
-      const {userId, roomId} = userData;
-      const updatedData = {userId, roomId, newName};
-      emitUpdatePlayerName(updatedData);
-      saveUserData({...userData, userName: newName});
-      printPlayerNameInProfileMenu(newName);
+      if (validateInputUser(userInput)) {
+        const newName = userInput;
+        const userData = getUserData();
+        const {userId, roomId} = userData;
+        const updatedData = {userId, roomId, newName};
+        emitUpdatePlayerName(updatedData);
+        saveUserData({...userData, userName: newName});
+        printPlayerNameInProfileMenu(newName);
+      }
     })
     .catch((error) => {
       console.error('An error occurred while updating the player name:', error);
     });
 });
+
+/**
+ * Validates an input value to ensure it is not empty or consists only of whitespace.
+ * @param {string} input - The input value to be validated.
+ * @return {boolean} - Returns true if the input is not empty and contains
+ * non-whitespace characters, otherwise returns false.
+ */
+function validateInputUser(input) {
+  return input && input.trim() !== '';
+}
 
 /**
  * Disconnects the player from the current session.
@@ -187,7 +203,7 @@ async function handleRoomAvailable(roomId) {
 async function getValidUserName(storedUserName) {
   const userName = isNonEmptyString(storedUserName) ?
     storedUserName :
-    await askForUserName();
+    await askForUserName(false);
   return isNonEmptyString(userName) ? userName : null;
 }
 
@@ -241,6 +257,7 @@ function adjustComponentsForModerator(isModerator) {
   if (isModerator) {
     changeTextInMenuItem('Stop Moderating');
     changePanelVisibility();
+    changeEditRoomNameVisibility();
   }
 }
 
@@ -268,27 +285,51 @@ function printRoomName(roomName) {
 }
 
 /**
- * Prompts the user to enter their name using a SweetAlert (swal) dialog.
- * @return {Promise<string | null>} A Promise that resolves with the
- * entered name or null if the user cancels the input.
- * @throws {Error} If SweetAlert is not available or if there is
- * an issue displaying the dialog.
+ * Displays a SweetAlert prompt for the user to enter their name.
+ * @param {boolean} isPlayerEditingName - Indicates whether the user is editing their name as a player.
+ * @return {Promise<string|null>} A Promise that resolves to the entered name if confirmed, or null if canceled.
+ * @throws {string} Throws an error message if the request fails.
  */
-function askForUserName() {
+function askForUserName(isPlayerEditingName) {
   return swal({
     title: 'Please enter your name',
-    text: 'Or leave it blank to enter as anonymous.',
+    closeOnClickOutside: isPlayerEditingName,
+    closeOnEsc: isPlayerEditingName,
     content: {
       element: 'input',
       attributes: {
         placeholder: 'Type your name',
       },
     },
-    closeOnClickOutside: false,
-    closeOnEsc: false,
     buttons: {
-      confirm: true,
+      cancel: {
+        text: 'Cancel',
+        value: null,
+        visible: true,
+        closeModal: true,
+      },
+      confirm: {
+        text: 'Confirm',
+        value: true,
+        visible: true,
+        closeModal: true,
+      },
     },
+  }).then((name) => {
+    if (name === null) {
+      if (isPlayerEditingName) {
+        swal.close();
+      } else {
+        redirectToIndex();
+      }
+    } else if (name.trim() === '') {
+      return askForUserName(isPlayerEditingName); // Reopen the prompt if the name is empty
+    } else {
+      return name.trim();
+    }
+  }).catch((err) => {
+    swal.stopLoading();
+    swal.close();
   });
 }
 
