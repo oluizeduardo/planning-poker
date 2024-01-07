@@ -175,7 +175,7 @@ async function handleRoomAvailable(roomId) {
     const userName = await getValidUserName(storedData.userName);
 
     let point = null;
-    if (storedData.point && storedData.point) {
+    if (storedData && storedData.point) {
       point = storedData.point;
     }
 
