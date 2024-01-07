@@ -5,6 +5,7 @@ import {
   removePlayerFromList,
   showMessageNewPlayerOnline,
   showMessagePlayerDisconnected,
+  showPlayerDone,
   showRoomNotAvailableMessage,
 } from './game.js';
 
@@ -33,6 +34,11 @@ socket.on('update_room_name', (newRoomName) => {
   printRoomName(newRoomName);
 });
 
+// Emitted by the server to inform that a specific user has already voted.
+socket.on('show_player_done', (userId) => {
+  showPlayerDone(userId);
+});
+
 /**
  * Emits a 'connect_room' event with the specified roomId
  * to the socket and handles the response.
@@ -50,13 +56,17 @@ function emitConnectWithRoom(newConnection, callback) {
         `Client connected with success in the room [${newConnection.roomId}]`,
       );
 
+      const {roomName, roomId} = foundRoom;
+      const {userName, isModerator, point} = newConnection.connection;
+
       // Object to save in session storage.
       const newConnectionResponseData = {
-        userName: newConnection.connection.userName,
         userId: socket.id,
-        roomName: foundRoom.roomName,
-        roomId: foundRoom.roomId,
-        isModerator: newConnection.isModerator,
+        roomName,
+        roomId,
+        point,
+        userName,
+        isModerator,
       };
 
       callback(newConnectionResponseData);
@@ -124,6 +134,20 @@ function emitUpdateRoomName(updateRoomNameObject) {
   }
 }
 
+/**
+ * Emits the chosen card data to inform the server which was the chosen
+ * point and by which player.
+ *
+ * @param {Object} chosenCardData - The data of the chosen card.
+ * @param {string} chosenCardData.userId - The user ID associated with the chosen card.
+ * @param {string} chosenCardData.point - The point or text associated with the chosen card.
+ */
+function emitChosenCard(chosenCardData) {
+  if (chosenCardData) {
+    socket.emit('chosen_card', chosenCardData);
+  }
+}
+
 export {
   emitConnectWithRoom,
   emitCheckRoomAvailability,
@@ -131,4 +155,5 @@ export {
   emitUpdatePlayerName,
   emitUpdateUserModeratorStatus,
   emitUpdateRoomName,
+  emitChosenCard,
 };

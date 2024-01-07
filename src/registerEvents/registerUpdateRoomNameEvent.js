@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import logger from '../config/logger.js';
 import {findById} from '../models/game.model.js';
 
 const EVENT_NAME = 'update_room_name';
@@ -26,12 +27,10 @@ function registerUpdateRoomNameEvent(socket, io) {
  *
  * @param {Object} data - The data payload containing information for updating the room name.
  * @param {Server} io - The Socket.IO server instance to emit events to connected sockets.
- *
- * @throws {Error} Throws an error if the data parameter is falsy or not an object.
  */
 function handleUpdateRoomName(data, io) {
   if (!data || typeof data !== 'object') {
-    throw new Error('Invalid data parameter. Expected an object.');
+    logger.error('Invalid data parameter. Expected an object.');
   }
 
   const {roomId, newRoomName} = data;
@@ -41,6 +40,8 @@ function handleUpdateRoomName(data, io) {
 
   // Update the room's name if the room is registered.
   if (registeredRoom) {
+    logger.info(`Room [${registeredRoom.roomName}] was renamed to [${newRoomName}].`);
+
     registeredRoom.roomName = newRoomName;
 
     // Broadcast the new room's name to all clients in the room.

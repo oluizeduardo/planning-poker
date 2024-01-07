@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import logger from '../config/logger.js';
 import {createGame} from '../models/game.model.js';
 import {v4 as uuidv4, v5 as uuidv5} from 'uuid';
 
@@ -34,6 +35,9 @@ function handleCreateRoom(socket, roomName, callback) {
   }
   const roomId = createIdFromString(roomName);
   createGame(roomId, roomName);
+
+  logger.info(`New room created - Room id: [${roomId}] Room name [${roomName}]`);
+
   callback(roomId);
 }
 

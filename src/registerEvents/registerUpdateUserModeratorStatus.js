@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import logger from '../config/logger.js';
 import {getUser, getUsers} from '../models/game.model.js';
 
 const EVENT_NAME = 'update_user_moderator_status';
@@ -43,6 +44,8 @@ function handleUpdateUserModeratorStatus(data, io) {
   // Update the user's moderator status if the user is registered.
   if (registeredUser) {
     registeredUser.isModerator = isModerator;
+
+    logger.info(`New game moderator - Player: [${registeredUser.userName} - ${userId}] Room: [${roomId}].`);
 
     // Get the updated list of users in the room.
     const updatedUsersList = getUsers(roomId);

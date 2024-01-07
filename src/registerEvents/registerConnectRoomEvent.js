@@ -35,6 +35,7 @@ function handleConnectRoom(socket, io, newConnection, callback) {
   const roomId = newConnection.roomId;
   const isModerator = newConnection.isModerator;
   const userName = newConnection.connection.userName;
+  const point = newConnection.connection.point;
   const userId = socket.id;
 
   const foundRoom = findById(roomId);
@@ -44,7 +45,7 @@ function handleConnectRoom(socket, io, newConnection, callback) {
     socket.join(roomId);
 
     // Save user details in the room's register.
-    const user = {userId, isModerator, userName, point: null};
+    const user = {userId, isModerator, userName, point};
     joinGame(roomId, user);
 
     // Log information about the new client connection

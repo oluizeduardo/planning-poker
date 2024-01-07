@@ -174,11 +174,17 @@ async function handleRoomAvailable(roomId) {
     const storedData = getUserData() || {};
     const userName = await getValidUserName(storedData.userName);
 
+    let point = null;
+    if (storedData.point && storedData.point) {
+      point = storedData.point;
+    }
+
     const userData = {
       roomId: roomId || getRoomId(),
-      isModerator: !!storedData.isModerator,
       connection: {
-        userName: userName || 'Anonymous',
+        userName: userName,
+        isModerator: !!storedData.isModerator,
+        point: point,
       },
     };
 
@@ -285,6 +291,21 @@ function printRoomName(roomName) {
 }
 
 /**
+ * Marks a player as done by adding a CSS class to the corresponding list item in the DOM.
+ *
+ * @param {string} userId - The ID of the player to be marked as done.
+ */
+function showPlayerDone(userId) {
+  const listItem = document.getElementById(userId);
+  if (listItem) {
+    const divIcon = listItem.getElementsByClassName('list-item--user-done');
+    if (divIcon.length > 0) {
+      divIcon[0].classList.remove('invisible');
+    }
+  }
+}
+
+/**
  * Displays a SweetAlert prompt for the user to enter their name.
  * @param {boolean} isPlayerEditingName - Indicates whether the user is editing their name as a player.
  * @return {Promise<string|null>} A Promise that resolves to the entered name if confirmed, or null if canceled.
@@ -386,9 +407,10 @@ function addPlayerNameOnTheList(users) {
   };
 
   playersList.innerHTML = users
-    .map(({userId, userName, isModerator}) => {
+    .map(({userId, userName, isModerator, point}) => {
       const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${userName}`;
       const classVisibility = isModerator ? '' : 'invisible';
+      const classPointDone = point ? '' : 'invisible';
 
       return `
       <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center ${darkThemeClasses.backgroundColor}">
@@ -399,9 +421,9 @@ function addPlayerNameOnTheList(users) {
             &#127918;
           </span>
         </div>
-        <h5>
-          <strong class="pe-3"></strong>
-        </h5>
+        <div class="${classPointDone} list-item--user-done text-muted" data-bs-toggle="tooltip" title="Already voted">
+          &#10004;
+        </div>
       </div>`;
     })
     .join('');
@@ -475,4 +497,5 @@ export {
   showRoomNotAvailableMessage,
   printPlayerNameInProfileMenu,
   printRoomName,
+  showPlayerDone,
 };

@@ -3,11 +3,11 @@ const rooms = [
   {
     roomId: '0000000000000000000',
     roomName: 'Test Room',
-    isModerator: false,
     connections: [
       {
         userId: '1111111111',
         userName: 'User Test',
+        isModerator: false,
         point: null,
       },
     ],
@@ -136,23 +136,26 @@ function deleteRoom(roomId) {
 }
 
 /**
- * Updates the point value for a user with the specified ID in the room.
+ * Updates the point for a user in a specific room.
  *
- * @param {string} id - The unique identifier of the user whose
- * point is to be updated.
- * @param {number} point - The new point value to be assigned to the user.
- * @return {void}
- * @throws {Error} Throws an error if the user with the specified ID
- * is not found in the room.
- *
- * @example
- * // Update user with ID '123' to have a point value of 50
- * updatePoint('123', 50);
+ * @param {string} roomId - The ID of the room.
+ * @param {string} userId - The ID of the user.
+ * @param {string} point - The new point to assign to the user.
+ * @throws {Error} Will throw an error if the provided roomId, userId, or point is falsy.
+ * @throws {Error} Will throw an error if the user with the specified roomId and userId is not found.
  */
-function updatePoint(id, point) {
-  const users = getUsers(roomId);
-  const idx = users.findIndex((x) => x.id == id);
-  users[idx].point = point;
+function updatePoint(roomId, userId, point) {
+  if (!roomId || !userId || !point) {
+    throw new Error('Invalid arguments. roomId, userId, and point must be provided.');
+  }
+
+  const user = getUser(roomId, userId);
+
+  if (!user) {
+    throw new Error(`User with roomId ${roomId} and userId ${userId} not found.`);
+  }
+
+  user.point = point;
 }
 
 /**

@@ -114,6 +114,9 @@ button {
   font-size: 22px;
   cursor: pointer;
 }
+.list-item--user-done{
+  font-size: 22px;
+}
 @media (min-width: 1300px) {
   .cards-container {
     width: 80%;
