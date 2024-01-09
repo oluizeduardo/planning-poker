@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 import {printRoomName} from './game.js';
-import {emitUpdateRoomName, emitUpdateUserModeratorStatus} from './socket-front-game.js';
+import {emitGetFinalAverage, emitUpdateRoomName, emitUpdateUserModeratorStatus} from './socket-front-game.js';
 import {getUserData, saveUserData} from './userSessionStorage.js';
 
 const pnBtnReviewEstimates = document.getElementById('pnBtnReviewEstimates');
 const btnStartStopModerating = document.getElementById('btnStartModerating');
 const btnEditRoomName = document.getElementById('btnEditRoomName');
+const btnReviewEstimates = document.getElementById('btnReviewEstimates');
 
 // /////////////////////////////
 // Start/Stop Moderating
@@ -41,6 +42,14 @@ btnEditRoomName.addEventListener('click', () => {
     .catch((error) => {
       console.error('An error occurred while updating the room\'s name:', error);
     });
+});
+
+// /////////////////////////////
+// Review Estimates
+// /////////////////////////////
+btnReviewEstimates.addEventListener('click', () => {
+  const {roomId} = getUserData();
+  emitGetFinalAverage(roomId);
 });
 
 /**

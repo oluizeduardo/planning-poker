@@ -423,7 +423,7 @@ function addPlayerNameOnTheList(users) {
         </div>
         <div class="${classPointDone} list-item--user-done text-muted" data-bs-toggle="tooltip" title="Already voted">
           &#10004;
-        </div>
+        </div>        
       </div>`;
     })
     .join('');

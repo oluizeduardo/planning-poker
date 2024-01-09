@@ -39,6 +39,20 @@ socket.on('show_player_done', (userId) => {
   showPlayerDone(userId);
 });
 
+// Emitted by the server to reve
+socket.on('reveal_final_average', (averagePoints) => {
+  printAveragePoints(averagePoints);
+});
+
+/**
+ * Prints the average points to a specified HTML element with the id 'final-average'.
+ * @param {number} averagePoints - The average points to be printed.
+ * @return {void}
+ */
+function printAveragePoints(averagePoints) {
+  document.getElementById('final-average').innerText = averagePoints;
+}
+
 /**
  * Emits a 'connect_room' event with the specified roomId
  * to the socket and handles the response.
@@ -148,6 +162,19 @@ function emitChosenCard(chosenCardData) {
   }
 }
 
+/**
+ * Emits a 'get_final_average' event to the server using the provided room ID.
+ *
+ * @param {string} roomId - The ID of the room for which the final average review is being emitted.
+ * @throws {Error} Throws an error if the roomId parameter is falsy.
+ * @return {void}
+ */
+function emitGetFinalAverage(roomId) {
+  if (roomId) {
+    socket.emit('get_final_average', roomId);
+  }
+}
+
 export {
   emitConnectWithRoom,
   emitCheckRoomAvailability,
@@ -156,4 +183,5 @@ export {
   emitUpdateUserModeratorStatus,
   emitUpdateRoomName,
   emitChosenCard,
+  emitGetFinalAverage,
 };
