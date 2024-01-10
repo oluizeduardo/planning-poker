@@ -175,7 +175,7 @@ async function handleRoomAvailable(roomId) {
     const userName = await getValidUserName(storedData.userName);
 
     let point = null;
-    if (storedData && storedData.point) {
+    if (storedData?.point) {
       point = storedData.point;
     }
 
@@ -304,6 +304,18 @@ function showPlayerDone(userId) {
     }
   }
 }
+
+/**
+ * Make all the icons disapear by adding the class 'invisible' to
+ * all the elements in array.
+ */
+function clearPlayerDone() {
+  const listIcons = document.getElementsByClassName('list-item--user-done');
+  for (let i = 0; i < listIcons.length; i++) {
+    listIcons[i].classList.add('invisible');
+  }
+}
+
 
 /**
  * Displays a SweetAlert prompt for the user to enter their name.
@@ -454,6 +466,14 @@ function showMessagePlayerDisconnected(userName) {
 }
 
 /**
+ * Displays a message indicating that a new game session has started
+ * @return {void}
+ */
+function showMessageNewGameSession() {
+  showAlertMessage('A new game session has started.');
+}
+
+/**
  * Displays an alert message in a designated container on the webpage.
  *
  * @param {string} message - The message to be displayed in the alert.
@@ -491,11 +511,13 @@ function showRoomNotAvailableMessage(text) {
 export {
   addPlayerNameOnTheList,
   redirectToIndex,
-  showMessageNewPlayerOnline,
   removePlayerFromList,
+  showMessageNewPlayerOnline,
   showMessagePlayerDisconnected,
+  showMessageNewGameSession,
   showRoomNotAvailableMessage,
   printPlayerNameInProfileMenu,
   printRoomName,
   showPlayerDone,
+  clearPlayerDone,
 };

@@ -105,10 +105,10 @@ button {
 #btnStartModerating{
   cursor: pointer;
 }
-.pnBtnReviewEstimates{
-  width: 20%;
-  margin-top: 50px;
-  margin-bottom: 50px;
+.pnButtonsGameController{
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .icon-game-control{
   font-size: 22px;
@@ -117,14 +117,26 @@ button {
 .list-item--user-done{
   font-size: 22px;
 }
+@media (min-width: 850px) {
+  .pnButtonsGameController {
+    width: 50%;
+    margin-top: 40px;
+  }
+}
 @media (min-width: 1300px) {
   .cards-container {
     width: 80%;
+  }
+  .pnButtonsGameController {
+    width: 30%;
   }
 }
 @media (min-width: 1400px) {
   .cards-container {
     width: 70%;
+  }
+  .pnButtonsGameController {
+    width: 20%;    
   }
 }
 @media (max-width: 500px) {

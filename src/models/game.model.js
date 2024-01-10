@@ -168,8 +168,6 @@ function updatePoint(roomId, userId, point) {
  */
 function resetGame(roomId) {
   const users = getUsers(roomId);
-
-  // Map over the users and set their points to null.
   users.forEach((user) => {
     user.point = null;
   });

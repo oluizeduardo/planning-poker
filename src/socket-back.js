@@ -10,6 +10,7 @@ import registerUpdateUserModeratorStatus from './registerEvents/registerUpdateUs
 import registerUpdateRoomNameEvent from './registerEvents/registerUpdateRoomNameEvent.js';
 import registerChosenCardEvent from './registerEvents/registerChosenCardEvent.js';
 import registerGetFinalAverageEvent from './registerEvents/registerGetFinalAverageEvent.js';
+import registerRestartGameEvent from './registerEvents/registerRestartGameEvent.js';
 
 io.on('connection', handleConnection);
 
@@ -29,4 +30,5 @@ function handleConnection(socket) {
   registerUpdateRoomNameEvent(socket, io);
   registerChosenCardEvent(socket, io);
   registerGetFinalAverageEvent(socket, io);
+  registerRestartGameEvent(socket, io);
 }

@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import {getUser, getUsers} from '../models/game.model.js';
+import logger from '../config/logger.js';
 
 const EVENT_NAME = 'update_player_name';
 
@@ -31,8 +32,14 @@ function registerUpdatePlayerNameEvent(socket, io) {
  */
 function handleUpdatePlayerName(data, io) {
   const user = getUser(data.roomId, data.userId);
+  const oldName = user.userName;
+  const newName = data.newName;
+
   if (user) {
     user.userName = data.newName;
+
+    logger.info(`Player [${oldName}] updated name to [${newName}].`);
+
     const users = getUsers(data.roomId);
     io.to(data.roomId).emit('update_players_list', user, users);
   }

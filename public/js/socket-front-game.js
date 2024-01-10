@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
 import {
   addPlayerNameOnTheList,
+  clearPlayerDone,
   printRoomName,
   removePlayerFromList,
+  showMessageNewGameSession,
   showMessageNewPlayerOnline,
   showMessagePlayerDisconnected,
   showPlayerDone,
@@ -39,9 +41,16 @@ socket.on('show_player_done', (userId) => {
   showPlayerDone(userId);
 });
 
-// Emitted by the server to reve
+// Emitted by the server to reveal the room's final average.
 socket.on('reveal_final_average', (averagePoints) => {
   printAveragePoints(averagePoints);
+});
+
+// Emitted by the server to to restart the game in the front-end.
+socket.on('restart_game_front', () => {
+  clearPlayerDone();
+  printAveragePoints('0');
+  showMessageNewGameSession();
 });
 
 /**
@@ -175,6 +184,19 @@ function emitGetFinalAverage(roomId) {
   }
 }
 
+/**
+ * Emits a 'restart_game' event to the server using the provided room ID.
+ *
+ * @param {string} roomId - The ID of the room for which the points need to be restarted.
+ * @throws {Error} Throws an error if the roomId parameter is falsy.
+ * @return {void}
+ */
+function emitRestartGame(roomId) {
+  if (roomId) {
+    socket.emit('restart_game', roomId);
+  }
+}
+
 export {
   emitConnectWithRoom,
   emitCheckRoomAvailability,
@@ -184,4 +206,5 @@ export {
   emitUpdateRoomName,
   emitChosenCard,
   emitGetFinalAverage,
+  emitRestartGame,
 };

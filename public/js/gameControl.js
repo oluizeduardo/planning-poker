@@ -1,12 +1,18 @@
 /* eslint-disable max-len */
 import {printRoomName} from './game.js';
-import {emitGetFinalAverage, emitUpdateRoomName, emitUpdateUserModeratorStatus} from './socket-front-game.js';
+import {
+  emitGetFinalAverage,
+  emitRestartGame,
+  emitUpdateRoomName,
+  emitUpdateUserModeratorStatus,
+} from './socket-front-game.js';
 import {getUserData, saveUserData} from './userSessionStorage.js';
 
-const pnBtnReviewEstimates = document.getElementById('pnBtnReviewEstimates');
+const pnButtonsGameController = document.getElementById('pnButtonsGameController');
 const btnStartStopModerating = document.getElementById('btnStartModerating');
 const btnEditRoomName = document.getElementById('btnEditRoomName');
 const btnReviewEstimates = document.getElementById('btnReviewEstimates');
+const btnRestartGame = document.getElementById('btnRestartGame');
 
 // /////////////////////////////
 // Start/Stop Moderating
@@ -52,6 +58,14 @@ btnReviewEstimates.addEventListener('click', () => {
   emitGetFinalAverage(roomId);
 });
 
+// /////////////////////////////
+// Restart Game
+// /////////////////////////////
+btnRestartGame.addEventListener('click', () => {
+  const {roomId} = getUserData();
+  emitRestartGame(roomId);
+});
+
 /**
  * Displays a SweetAlert prompt to ask the user for a room's name.
  *
@@ -86,18 +100,20 @@ function askForRoomName() {
         closeModal: true,
       },
     },
-  }).then((name) => {
-    if (name === null) {
+  })
+    .then((name) => {
+      if (name === null) {
+        swal.close();
+      } else if (name.trim() === '') {
+        return askForRoomName(); // Reopen the prompt if the name is empty
+      } else {
+        return name.trim();
+      }
+    })
+    .catch((err) => {
+      swal.stopLoading();
       swal.close();
-    } else if (name.trim() === '') {
-      return askForRoomName(); // Reopen the prompt if the name is empty
-    } else {
-      return name.trim();
-    }
-  }).catch((err) => {
-    swal.stopLoading();
-    swal.close();
-  });
+    });
 }
 
 /**
@@ -113,7 +129,9 @@ function changeTextInMenuItem(newText) {
   const buttonText = btnStartModerating.innerText;
   if (!newText) {
     newText =
-    buttonText === 'Start Moderating' ? 'Stop Moderating' : 'Start Moderating';
+      buttonText === 'Start Moderating' ?
+        'Stop Moderating' :
+        'Start Moderating';
   }
   btnStartModerating.innerText = newText;
 }
@@ -123,7 +141,7 @@ function changeTextInMenuItem(newText) {
  * @return {void}
  */
 function changePanelVisibility() {
-  pnBtnReviewEstimates.classList.toggle('invisible');
+  pnButtonsGameController.classList.toggle('invisible');
 }
 
 /**
