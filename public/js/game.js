@@ -311,8 +311,8 @@ function showPlayerDone(userId) {
  */
 function clearPlayerDone() {
   const listIcons = document.getElementsByClassName('list-item--user-done');
-  for (let i = 0; i < listIcons.length; i++) {
-    listIcons[i].classList.add('invisible');
+  for (const icon of listIcons) {
+    icon.classList.add('invisible');
   }
 }
 
