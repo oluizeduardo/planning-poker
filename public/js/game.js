@@ -247,24 +247,27 @@ function processesBasicSettings(data) {
   saveUserData(data);
   printRoomName(data.roomName);
   printPlayerNameInProfileMenu(data.userName);
-  adjustComponentsForModerator(data.isModerator);
+  setBackgroundClassForSelectedCard(data.point);
+  if (data.isModerator) {
+    adjustComponentsForModerator();
+  }
+}
+
+function setBackgroundClassForSelectedCard(point) {
+  if (point) {
+    const idCard = 'card-'+point;
+    document.getElementById(idCard).classList.add('card-selected');
+  }
 }
 
 /**
- * Adjusts components based on the moderator status.
- *
- * If the user is a moderator, this function changes the text in a menu item
- * to 'Stop Moderating' and adjusts the visibility of a panel.
- *
- * @param {boolean} isModerator - A boolean indicating whether the user is a moderator.
+ * Adjusts components for moderator player.
  * @return {void}
  */
-function adjustComponentsForModerator(isModerator) {
-  if (isModerator) {
-    changeTextInMenuItem('Stop Moderating');
-    changePanelVisibility();
-    changeEditRoomNameVisibility();
-  }
+function adjustComponentsForModerator() {
+  changeTextInMenuItem('Stop Moderating');
+  changePanelVisibility();
+  changeEditRoomNameVisibility();
 }
 
 /**
