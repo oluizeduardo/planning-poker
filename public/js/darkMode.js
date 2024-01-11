@@ -3,7 +3,9 @@ const checkDarkMode = document.getElementById('checkDarkMode');
 const headerElement = document.getElementById('el_header');
 const roomName = document.getElementById('room-name');
 const cards = document.querySelectorAll('.card');
+const leftIcons = document.querySelectorAll('.left-icon');
 const centerIcons = document.querySelectorAll('.center-icon');
+const rightIcons = document.querySelectorAll('.right-icon');
 
 const SESSION_STORAGE_NAME = 'backgroundMode';
 const BACKGROUND_MODE_DARK = 'dark';
@@ -45,7 +47,19 @@ if (backgroundMode) {
       backgroundMode === BACKGROUND_MODE_DARK,
     );
   });
+  leftIcons.forEach((item) => {
+    item.classList.toggle(
+      CLASS_TEXT_WHITE,
+      backgroundMode === BACKGROUND_MODE_DARK,
+    );
+  });
   centerIcons.forEach((item) => {
+    item.classList.toggle(
+      CLASS_TEXT_WHITE,
+      backgroundMode === BACKGROUND_MODE_DARK,
+    );
+  });
+  rightIcons.forEach((item) => {
     item.classList.toggle(
       CLASS_TEXT_WHITE,
       backgroundMode === BACKGROUND_MODE_DARK,
@@ -70,14 +84,26 @@ checkDarkMode.addEventListener('change', () => {
   headerElement.classList.toggle(CLASS_BG_DARK_THEME_LIGHT);
   roomName.classList.toggle(CLASS_TEXT_WHITE);
 
+  // //////////
+  // CARDS
+  // //////////
   cards.forEach((item) => {
     item.classList.toggle(CLASS_BG_DARK_THEME_LIGHT);
     item.classList.toggle(CLASS_WHITE_SHADOW);
   });
+  leftIcons.forEach((item) => {
+    item.classList.toggle(CLASS_TEXT_WHITE);
+  });
   centerIcons.forEach((item) => {
     item.classList.toggle(CLASS_TEXT_WHITE);
   });
+  rightIcons.forEach((item) => {
+    item.classList.toggle(CLASS_TEXT_WHITE);
+  });
 
+  // //////////
+  // MENU ITENS
+  // //////////
   changeBackgroundThemeMenuItems();
 
   const newMode = document.body.classList.contains(CLASS_DARK) ?

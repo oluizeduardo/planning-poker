@@ -3,6 +3,7 @@ import {
   addPlayerNameOnTheList,
   clearPlayerDone,
   printRoomName,
+  removeBackgroundFromSelectedCards,
   removePlayerFromList,
   showMessageNewGameSession,
   showMessageNewPlayerOnline,
@@ -50,6 +51,7 @@ socket.on('reveal_final_average', (averagePoints) => {
 socket.on('restart_game_front', () => {
   clearPlayerDone();
   printAveragePoints('0');
+  removeBackgroundFromSelectedCards();
   showMessageNewGameSession();
 });
 

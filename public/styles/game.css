@@ -51,11 +51,13 @@ header {
   transform: scale(1.05);
 }
 .card:active {
-  background: rgb(143, 151, 155);
+  background: #0d6dfd2f;
+}
+.card-selected{
+  background: #0d6dfd2f;
 }
 .left-icon {
   align-self: flex-start;
-  color: grey;
   padding: 3px;
 }
 .center-icon {
@@ -64,7 +66,7 @@ header {
   width: 75%;
   height: 120px;
   font-size: 46px;
-  border: 1px solid #d5d9de;
+  border: 1px solid #bcc7cc;
   border-radius: 4px;
   border-width: thin;
   margin-left: 16px;
@@ -75,7 +77,6 @@ header {
 }
 .right-icon {
   align-self: flex-end;
-  color: grey;
   padding: 3px;
   transform: rotate(-180deg);
 }

@@ -316,6 +316,16 @@ function clearPlayerDone() {
   }
 }
 
+/**
+ * Removes the 'bg-secondary' class from all elements with both 'card' and 'bg-secondary' classes.
+ * @return {void} - This function does not return a value.
+ */
+function removeBackgroundFromSelectedCards() {
+  const selectedCards = document.getElementsByClassName('card card-selected');
+  Array.from(selectedCards).forEach((_ele) => {
+    _ele.classList.remove('card-selected');
+  });
+}
 
 /**
  * Displays a SweetAlert prompt for the user to enter their name.
@@ -520,4 +530,5 @@ export {
   printRoomName,
   showPlayerDone,
   clearPlayerDone,
+  removeBackgroundFromSelectedCards,
 };
