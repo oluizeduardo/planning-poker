@@ -38,7 +38,13 @@ function handleGetFinalAverage(io, roomId) {
  */
 function calculateAveragePoints(roomId) {
   const users = getUsers(roomId);
-  const votedPlayers = users.filter((user) => user.point !== null && user.point !== undefined);
+  const votedPlayers = users.filter(
+    (user) =>
+      user.point !== null &&
+      user.point !== undefined &&
+      user.point !== '?' &&
+      user.point !== 'COFFEE',
+  );
 
   if (votedPlayers.length === 0) {
     return 0; // Returns 0 if no player voted to avoid division by zero.
