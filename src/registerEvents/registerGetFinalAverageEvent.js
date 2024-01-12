@@ -38,11 +38,18 @@ function handleGetFinalAverage(io, roomId) {
  */
 function calculateAveragePoints(roomId) {
   const users = getUsers(roomId);
-  const totalPoints = users.reduce(
-    (sum, user) => sum + (parseInt(user.point, 10) || 0),
+  const votedPlayers = users.filter((user) => user.point !== null && user.point !== undefined);
+
+  if (votedPlayers.length === 0) {
+    return 0; // Returns 0 if no player voted to avoid division by zero.
+  }
+
+  const totalPoints = votedPlayers.reduce(
+    (sum, user) => sum + parseInt(user.point, 10),
     0,
   );
-  return Math.ceil(totalPoints / users.length);
+
+  return Math.ceil(totalPoints / votedPlayers.length);
 }
 
 export default registerGetFinalAverageEvent;
