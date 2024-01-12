@@ -183,6 +183,21 @@ function isRoomEmpty(roomId) {
   return (getUsers(roomId).length === 0);
 }
 
+/**
+ *
+ * @param {String} roomId
+ * @return {void}
+ */
+function extractPoints(roomId) {
+  const users = getUsers(roomId);
+
+  const points = users
+    .filter((user) => user.point !== null && user.point !== undefined)
+    .map((user) => user.point);
+
+  return points;
+}
+
 export {
   createGame,
   findById,
@@ -195,4 +210,5 @@ export {
   getUsers,
   getUser,
   isRoomEmpty,
+  extractPoints,
 };

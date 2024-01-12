@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import {getUsers} from '../models/game.model.js';
+import {extractPoints, getUsers} from '../models/game.model.js';
 
 const EVENT_NAME = 'get_final_average';
 
@@ -24,8 +24,13 @@ function registerGetFinalAverageEvent(socket, io) {
  * @return {void}
  */
 function handleGetFinalAverage(io, roomId) {
-  const averagePoints = calculateAveragePoints(roomId);
-  io.to(roomId).emit('reveal_final_average', averagePoints);
+  const finalResultObject = {
+    roomId,
+    finalAverage: calculateAveragePoints(roomId),
+    points: extractPoints(roomId),
+  };
+
+  io.to(roomId).emit('reveal_final_result', finalResultObject);
 }
 
 /**

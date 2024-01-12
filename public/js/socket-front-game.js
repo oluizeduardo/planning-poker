@@ -42,9 +42,9 @@ socket.on('show_player_done', (userId) => {
   showPlayerDone(userId);
 });
 
-// Emitted by the server to reveal the room's final average.
-socket.on('reveal_final_average', (averagePoints) => {
-  printAveragePoints(averagePoints);
+// Emitted by the server to reveal the room's final result.
+socket.on('reveal_final_result', (finalResultObject) => {
+  printAveragePoints(finalResultObject.finalAverage);
 });
 
 // Emitted by the server to to restart the game in the front-end.
