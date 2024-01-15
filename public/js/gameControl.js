@@ -8,11 +8,13 @@ import {
 } from './socket-front-game.js';
 import {getUserData, saveUserData} from './userSessionStorage.js';
 
-const pnButtonsGameController = document.getElementById('pnButtonsGameController');
+const pnButtonsGameController = document.getElementById('panel-base-buttons-game-controller');
 const btnStartStopModerating = document.getElementById('btnStartModerating');
 const btnEditRoomName = document.getElementById('btnEditRoomName');
 const btnReviewEstimates = document.getElementById('btnReviewEstimates');
 const btnRestartGame = document.getElementById('btnRestartGame');
+const panelBaseCards = document.getElementById('panel-base-cards');
+const panelBaseChart = document.getElementById('panel-base-chart');
 
 // /////////////////////////////
 // Start/Stop Moderating
@@ -54,6 +56,9 @@ btnEditRoomName.addEventListener('click', () => {
 // Review Estimates
 // /////////////////////////////
 btnReviewEstimates.addEventListener('click', () => {
+  panelBaseCards.style.display = 'none';
+  panelBaseChart.style.display = 'flex';
+
   const {roomId} = getUserData();
   emitGetFinalAverage(roomId);
 });
@@ -62,6 +67,9 @@ btnReviewEstimates.addEventListener('click', () => {
 // Restart Game
 // /////////////////////////////
 btnRestartGame.addEventListener('click', () => {
+  panelBaseChart.style.display = 'none';
+  panelBaseCards.style.display = 'flex';
+
   const {roomId} = getUserData();
   emitRestartGame(roomId);
 });
@@ -141,7 +149,11 @@ function changeTextInMenuItem(newText) {
  * @return {void}
  */
 function changePanelVisibility() {
-  pnButtonsGameController.classList.toggle('invisible');
+  if (pnButtonsGameController.style.display === 'flex') {
+    pnButtonsGameController.style.display = 'none';
+  } else {
+    pnButtonsGameController.style.display = 'flex';
+  }
 }
 
 /**

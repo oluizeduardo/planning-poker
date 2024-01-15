@@ -253,6 +253,12 @@ function processesBasicSettings(data) {
   }
 }
 
+/**
+ * Sets the background class for the selected card identified by the given point.
+ *
+ * @param {string | number} point - The identifier of the selected card.
+ * @return {void}
+ */
 function setBackgroundClassForSelectedCard(point) {
   if (point) {
     const idCard = 'card-'+point;

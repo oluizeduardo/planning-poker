@@ -23,7 +23,7 @@ function cardClickHandler(ele) {
   selectedCard = ele;
   addSelectedCardClass(selectedCard);
 
-  const pointInText = ele.querySelector('.center-icon').textContent;
+  const pointInText = ele.querySelector('.card-center-icon').textContent;
   const adjustedText = getAdjustedPoint(pointInText);
   const userData = getUserData();
 
