@@ -441,8 +441,6 @@ function addPlayerNameOnTheList(users) {
       const classVisibility = isModerator ? '' : 'invisible';
       const classPointDone = point ? '' : 'invisible';
 
-      console.log(isModerator);
-
       return `
       <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center ${darkThemeClasses.backgroundColor}">
         <div class="d-flex align-items-center">

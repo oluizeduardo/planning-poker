@@ -127,9 +127,11 @@ button {
   display: none;
   z-index: 1000;
 }
-.icon-edit {
+.icon {
   width: 16px;
   height: 16px;
+}
+.icon-edit {  
   margin-left: 10px;
   cursor: pointer;
 }
@@ -152,6 +154,11 @@ button {
 }
 .list-item--user-done{
   font-size: 22px;
+}
+.panel-base-table-result{
+  width: 50%;
+  margin-right: 70px;
+  margin-top: 50px;
 }
 /************************
     MEDIA QUERIES
@@ -199,5 +206,13 @@ button {
   }
   .pnButtonsGameController{
     width: 100%;
+  }
+  .panel-base-chart {
+    width: 100%;
+    height: auto;
+  }
+  .panel-base-table-result{
+    width: 100%;
+    margin: 10px;
   }
 } 

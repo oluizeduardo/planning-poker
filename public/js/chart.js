@@ -1,3 +1,5 @@
+/* eslint-disable no-var */
+/* eslint-disable max-len */
 google.charts.load('current', {'packages': ['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
@@ -5,25 +7,29 @@ google.charts.setOnLoadCallback(drawChart);
  * drawChart
  */
 function drawChart() {
-  const data = google.visualization.arrayToDataTable([
-    ['Points', 'Number of votes'],
-    ['1 Point', 0],
-    ['2 Points', 2],
-    ['3 Points', 3],
-    ['5 Points', 0],
-    ['8 Points', 0],
+  var data = google.visualization.arrayToDataTable([
+    ['Player', 'Vote', {role: 'style'}],
+    ['Luiz', 8, '#b87333'],
+    ['Edson', 2, '#e5e4e2'],
+    ['João', 5, 'gold'],
+    ['Average', 8, 'color: green'],
   ]);
 
-  const options = {
-    pieHole: 0.5,
-    backgroundColor: '#eaeff6',
-    width: 600,
-    height: 340,
-    pieSliceText: 'value',
-    legend: 'right',
-  };
+  var view = new google.visualization.DataView(data);
+  view.setColumns([0, 1,
+    {calc: 'stringify',
+      sourceColumn: 1,
+      type: 'string',
+      role: 'annotation'},
+    2]);
 
-  const chartElement = document.getElementById('chart');
-  const chart = new google.visualization.PieChart(chartElement);
-  chart.draw(data, options);
-};
+  var options = {
+    width: 700,
+    height: 340,
+    bar: {groupWidth: '90%'},
+    legend: {position: 'none'},
+    backgroundColor: '#0d1117',
+  };
+  var chart = new google.visualization.ColumnChart(document.getElementById('chart'));
+  chart.draw(view, options);
+}
