@@ -33,7 +33,7 @@ function registerConnectRoomEvent(socket, io) {
  */
 function handleConnectRoom(socket, io, newConnection, callback) {
   const roomId = newConnection.roomId;
-  const isModerator = newConnection.isModerator;
+  const isModerator = newConnection.connection.isModerator;
   const userName = newConnection.connection.userName;
   const point = newConnection.connection.point;
   const userId = socket.id;

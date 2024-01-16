@@ -174,17 +174,15 @@ async function handleRoomAvailable(roomId) {
     const storedData = getUserData() || {};
     const userName = await getValidUserName(storedData.userName);
 
-    let point = null;
-    if (storedData?.point) {
-      point = storedData.point;
-    }
+    const moderator = storedData.isModerator || false;
+    const point = storedData.point || null;
 
     const userData = {
       roomId: roomId || getRoomId(),
       connection: {
-        userName: userName,
-        isModerator: !!storedData.isModerator,
-        point: point,
+        userName,
+        isModerator: moderator,
+        point,
       },
     };
 
@@ -442,6 +440,8 @@ function addPlayerNameOnTheList(users) {
       const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${userName}`;
       const classVisibility = isModerator ? '' : 'invisible';
       const classPointDone = point ? '' : 'invisible';
+
+      console.log(isModerator);
 
       return `
       <div id="${userId}" class="list-group-item d-flex justify-content-between align-items-center ${darkThemeClasses.backgroundColor}">
