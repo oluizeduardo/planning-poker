@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import {printRoomName} from './game.js';
+import {printRoomName, showMessageWaitingForPlayersToVote} from './game.js';
 import {
   emitRestartGame,
   emitReviewEstimates,
@@ -11,7 +11,7 @@ import {getUserData, saveUserData} from './userSessionStorage.js';
 const pnButtonsGameController = document.getElementById('panel-base-buttons-game-controller');
 const btnStartStopModerating = document.getElementById('btnStartModerating');
 const btnEditRoomName = document.getElementById('btnEditRoomName');
-const btnReviewEstimates = document.getElementById('btnReviewEstimates');
+const btnRevealEstimates = document.getElementById('btnRevealEstimates');
 const btnRestartGame = document.getElementById('btnRestartGame');
 
 // /////////////////////////////
@@ -51,11 +51,11 @@ btnEditRoomName.addEventListener('click', () => {
 });
 
 // /////////////////////////////
-// Review Estimates
+// Reveal Estimates
 // /////////////////////////////
-btnReviewEstimates.addEventListener('click', () => {
+btnRevealEstimates.addEventListener('click', () => {
   const {roomId} = getUserData();
-  emitReviewEstimates(roomId);
+  emitReviewEstimates(roomId, showMessageWaitingForPlayersToVote);
 });
 
 // /////////////////////////////

@@ -217,12 +217,13 @@ function emitChosenCard(chosenCardData) {
  * Emits a 'review_estimates' event to the server using the provided room ID.
  *
  * @param {string} roomId - The ID of the room for which the final game result is being emitted.
+ * @param {function} callback - A callback function to be executed if the list of votes is empty.
  * @throws {Error} Throws an error if the roomId parameter is falsy.
  * @return {void}
  */
-function emitReviewEstimates(roomId) {
+function emitReviewEstimates(roomId, callback) {
   if (roomId) {
-    socket.emit('review_estimates', roomId);
+    socket.emit('review_estimates', roomId, callback);
   }
 }
 

@@ -525,6 +525,18 @@ function showRoomNotAvailableMessage(text) {
   });
 }
 
+/**
+ * Displays a warning message indicating the user to wait for players to vote.
+ * This message should be shown when the moderator tries to reveal the game result before players vote.
+ */
+function showMessageWaitingForPlayersToVote() {
+  swal({
+    title: 'Hold on!',
+    text: 'Waiting for players to vote.',
+    icon: 'warning',
+  });
+}
+
 export {
   addPlayerNameOnTheList,
   redirectToIndex,
@@ -533,6 +545,7 @@ export {
   showMessagePlayerDisconnected,
   showMessageNewGameSession,
   showRoomNotAvailableMessage,
+  showMessageWaitingForPlayersToVote,
   printPlayerNameInProfileMenu,
   printRoomName,
   showPlayerDone,

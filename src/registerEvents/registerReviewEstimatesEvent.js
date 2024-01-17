@@ -11,8 +11,8 @@ const EVENT_NAME = 'review_estimates';
  * @return {void}
  */
 function registerReviewEstimatesEvent(socket, io) {
-  socket.on(EVENT_NAME, (roomId) => {
-    handleReviewEstimates(io, roomId);
+  socket.on(EVENT_NAME, (roomId, callback) => {
+    handleReviewEstimates(io, roomId, callback);
   });
 }
 
@@ -21,16 +21,23 @@ function registerReviewEstimatesEvent(socket, io) {
  *
  * @param {Server} io - The socket.io server.
  * @param {string} roomId - The identifier of the room.
+ * @param {function} callback - The callback function to be executed if the list of points is empty.
  * @return {void}
  */
-function handleReviewEstimates(io, roomId) {
-  const finalResultObject = {
-    roomId,
-    average: calculateAveragePoints(roomId),
-    points: extractPoints(roomId),
-  };
-
-  io.to(roomId).emit('reveal_final_result', finalResultObject);
+function handleReviewEstimates(io, roomId, callback) {
+  const listOfPoints = extractPoints(roomId);
+  // Reveal final result only if any player has already voted.
+  if (listOfPoints.length > 0) {
+    const finalResultObject = {
+      roomId,
+      average: calculateAveragePoints(roomId),
+      points: listOfPoints,
+    };
+    io.to(roomId).emit('reveal_final_result', finalResultObject);
+  } else {
+    // Don't reveal the result, show warning message.
+    callback();
+  }
 }
 
 /**
