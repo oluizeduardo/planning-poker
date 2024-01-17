@@ -1,4 +1,4 @@
-# Planning Poker
+# SCRUM Planning Poker
 Planning Poker is a way to estimate a relative effort for a given task.
 
 ## Technologies applied
