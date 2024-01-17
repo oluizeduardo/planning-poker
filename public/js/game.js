@@ -174,17 +174,15 @@ async function handleRoomAvailable(roomId) {
     const storedData = getUserData() || {};
     const userName = await getValidUserName(storedData.userName);
 
-    let point = null;
-    if (storedData?.point) {
-      point = storedData.point;
-    }
+    const moderator = storedData.isModerator || false;
+    const point = storedData.point || null;
 
     const userData = {
       roomId: roomId || getRoomId(),
       connection: {
-        userName: userName,
-        isModerator: !!storedData.isModerator,
-        point: point,
+        userName,
+        isModerator: moderator,
+        point,
       },
     };
 
@@ -253,6 +251,12 @@ function processesBasicSettings(data) {
   }
 }
 
+/**
+ * Sets the background class for the selected card identified by the given point.
+ *
+ * @param {string | number} point - The identifier of the selected card.
+ * @return {void}
+ */
 function setBackgroundClassForSelectedCard(point) {
   if (point) {
     const idCard = 'card-'+point;

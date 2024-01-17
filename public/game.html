@@ -37,11 +37,25 @@
             <span
               id="btnEditRoomName"
               class="icon-edit invisible"
-              data-bs-toggle="tooltip" title="Edit room's name">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
-                fill="none" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                class="feather feather-edit-3">
-                <path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              data-bs-toggle="tooltip"
+              title="Edit room's name"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#6c757d"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-edit-3"
+              >
+                <path d="M12 20h9"></path>
+                <path
+                  d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                ></path>
               </svg>
             </span>
           </div>
@@ -77,13 +91,14 @@
                     <a class="dropdown-item">
                       <div
                         class="d-flex align-items-center justify-content-between"
-                        data-bs-toggle="tooltip" title="Edit your name"
+                        data-bs-toggle="tooltip"
+                        title="Edit your name"
                       >
                         <strong id="player-name-menu-item">Player name</strong>
                         <span
                           id="btnEditName"
                           data-feather="edit-3"
-                          class="icon-edit"                          
+                          class="icon icon-edit"
                         ></span>
                       </div>
                     </a>
@@ -91,12 +106,8 @@
                   <li><hr class="dropdown-divider" /></li>
                   <li>
                     <a class="dropdown-item">
-                      <div
-                        class="d-flex align-items-center justify-content-between"
-                      >
-                        <label class="form-check-label" for="checkDarkMode"
-                          >Dark mode</label
-                        >
+                      <div class="d-flex align-items-center justify-content-between">
+                        <label class="form-check-label" for="checkDarkMode">Dark mode</label>
                         <input
                           class="form-check-input mt-0 ms-5"
                           type="checkbox"
@@ -112,9 +123,9 @@
                   </li>
                   <li><hr class="dropdown-divider" /></li>
                   <li>
-                    <a class="dropdown-item" id="btnLogOut" href="#"
-                      >Sign out</a
-                    >
+                    <a class="dropdown-item" id="btnLogOut" href="#">
+                      <span data-feather="log-out" class="icon"></span>
+                      Leave room</a>
                   </li>
                 </ul>
               </div>
@@ -124,94 +135,103 @@
       </div>
     </header>
 
-    <main class="w-100 mx-auto d-flex">
-      <!-- PANEL BASE -->
-      <div class="d-flex flex-wrap justify-content-center">
+    <main class="main-base mx-auto">
+      <div class="panel-base-container d-flex flex-wrap justify-content-center">
+        
+        <!-- PANEL TABLE RESULT -->
+        <div id="panel-base-chart" class="panel-base-chart justify-content-end align-items-center">
+          <div class="panel-base-table-result">
+            <figure>
+              <figcaption class="fs-5 mb-5 text-muted">Distribution of Points</figcaption>
+              <table class="table table-light table-striped table-borderless fs-5">
+                
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center table-top-left-round-border">Player</th>
+                    <th scope="col" class="text-center table-top-right-round-border">Vote</th>
+                  </tr>
+                </thead>
+                <tbody id="final-result-table-body">
+                </tbody>
+              </table>
+            </figure>
+          </div>
+        </div>
+
         <!-- PANEL CARDS -->
-        <div class="panel-cards mb-3">
+        <div id="panel-base-cards" class="panel-base-cards">
           <div class="cards-container">
             <button id="card-1" class="card">
-              <div class="left-icon">1</div>
-              <div class="center-icon">1</div>
-              <div class="right-icon">1</div>
+              <div class="card-left-icon">1</div>
+              <div class="card-center-icon">1</div>
+              <div class="card-right-icon">1</div>
             </button>
 
             <button id="card-2" class="card">
-              <div class="left-icon">2</div>
-              <div class="center-icon">2</div>
-              <div class="right-icon">2</div>
+              <div class="card-left-icon">2</div>
+              <div class="card-center-icon">2</div>
+              <div class="card-right-icon">2</div>
             </button>
 
             <button id="card-3" class="card">
-              <div class="left-icon">3</div>
-              <div class="center-icon">3</div>
-              <div class="right-icon">3</div>
+              <div class="card-left-icon">3</div>
+              <div class="card-center-icon">3</div>
+              <div class="card-right-icon">3</div>
             </button>
 
             <button id="card-5" class="card">
-              <div class="left-icon">5</div>
-              <div class="center-icon">5</div>
-              <div class="right-icon">5</div>
+              <div class="card-left-icon">5</div>
+              <div class="card-center-icon">5</div>
+              <div class="card-right-icon">5</div>
             </button>
 
             <button id="card-8" class="card">
-              <div class="left-icon">8</div>
-              <div class="center-icon">8</div>
-              <div class="right-icon">8</div>
+              <div class="card-left-icon">8</div>
+              <div class="card-center-icon">8</div>
+              <div class="card-right-icon">8</div>
             </button>
 
             <button id="card-13" class="card">
-              <div class="left-icon">13</div>
-              <div class="center-icon">13</div>
-              <div class="right-icon">13</div>
+              <div class="card-left-icon">13</div>
+              <div class="card-center-icon">13</div>
+              <div class="card-right-icon">13</div>
             </button>
 
             <button id="card-21" class="card">
-              <div class="left-icon">21</div>
-              <div class="center-icon">21</div>
-              <div class="right-icon">21</div>
+              <div class="card-left-icon">21</div>
+              <div class="card-center-icon">21</div>
+              <div class="card-right-icon">21</div>
             </button>
 
             <button id="card-34" class="card">
-              <div class="left-icon">34</div>
-              <div class="center-icon">34</div>
-              <div class="right-icon">34</div>
+              <div class="card-left-icon">34</div>
+              <div class="card-center-icon">34</div>
+              <div class="card-right-icon">34</div>
             </button>
 
             <button id="card-?" class="card">
-              <div class="left-icon">?</div>
-              <div class="center-icon">?</div>
-              <div class="right-icon">?</div>
+              <div class="card-left-icon">?</div>
+              <div class="card-center-icon">?</div>
+              <div class="card-right-icon">?</div>
             </button>
 
             <button id="card-COFFEE" class="card">
-              <div class="left-icon">&#9749;</div>
-              <div class="center-icon">&#9749;</div>
-              <div class="right-icon">&#9749;</div>
+              <div class="card-left-icon">&#9749;</div>
+              <div class="card-center-icon">&#9749;</div>
+              <div class="card-right-icon">&#9749;</div>
             </button>
           </div>
         </div>
 
         <!-- PANEL PLAYERS -->
-        <div class="panel-players">
+        <div class="panel-base-players">
           <h4 class="align-items-center mb-3">
             <span class="text-primary">Players</span>
           </h4>
           <div id="players-list" class="list-group mb-3"></div>
-
-          <div class="list-group mb-3">
-            <div class="list-group-item">
-              <h6
-                class="d-flex justify-content-between align-items-center mt-2"
-              >
-                <span class="text-primary">Average:</span>
-                <span id="final-average" class="fs-6 badge bg-primary rounded-pill me-3">0</span>
-              </h6>
-            </div>
-          </div>
         </div>
       </div>
-      <!-- MESSAGE NEW PLAYER -->
+
       <span id="alertContainer" class="custom-alert">
         <div
           id="alert"
@@ -229,10 +249,13 @@
       </span>
     </main>
 
-    <div class="d-flex justify-content-center">
+    <div
+      id="panel-base-buttons-game-controller"
+      class="panel-base-buttons-game-controller justify-content-center"
+    >
       <span
         id="pnButtonsGameController"
-        class="invisible pnButtonsGameController d-flex flex-column"
+        class="pnButtonsGameController d-flex flex-column"
       >
         <button
           id="btnRestartGame"
@@ -276,10 +299,11 @@
     </script>
     <!-- SWEETALERT -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <!-- CUSTOM SCRIPTS -->
     <script src="./js/game.js" type="module"></script>
     <script src="./js/darkMode.js" type="module"></script>
     <script src="./js/gameControl.js" type="module"></script>
     <script src="./js/cardSelection.js" type="module"></script>
+    <script src="./js/chart.js" type="module"></script>
   </body>
 </html>

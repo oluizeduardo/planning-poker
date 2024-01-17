@@ -3,9 +3,9 @@ const checkDarkMode = document.getElementById('checkDarkMode');
 const headerElement = document.getElementById('el_header');
 const roomName = document.getElementById('room-name');
 const cards = document.querySelectorAll('.card');
-const leftIcons = document.querySelectorAll('.left-icon');
-const centerIcons = document.querySelectorAll('.center-icon');
-const rightIcons = document.querySelectorAll('.right-icon');
+const leftIcons = document.querySelectorAll('.card-left-icon');
+const centerIcons = document.querySelectorAll('.card-center-icon');
+const rightIcons = document.querySelectorAll('.card-right-icon');
 
 const SESSION_STORAGE_NAME = 'backgroundMode';
 const BACKGROUND_MODE_DARK = 'dark';

@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 import {printRoomName} from './game.js';
 import {
-  emitGetFinalAverage,
   emitRestartGame,
+  emitReviewEstimates,
   emitUpdateRoomName,
   emitUpdateUserModeratorStatus,
 } from './socket-front-game.js';
 import {getUserData, saveUserData} from './userSessionStorage.js';
 
-const pnButtonsGameController = document.getElementById('pnButtonsGameController');
+const pnButtonsGameController = document.getElementById('panel-base-buttons-game-controller');
 const btnStartStopModerating = document.getElementById('btnStartModerating');
 const btnEditRoomName = document.getElementById('btnEditRoomName');
 const btnReviewEstimates = document.getElementById('btnReviewEstimates');
@@ -55,7 +55,7 @@ btnEditRoomName.addEventListener('click', () => {
 // /////////////////////////////
 btnReviewEstimates.addEventListener('click', () => {
   const {roomId} = getUserData();
-  emitGetFinalAverage(roomId);
+  emitReviewEstimates(roomId);
 });
 
 // /////////////////////////////
@@ -141,7 +141,11 @@ function changeTextInMenuItem(newText) {
  * @return {void}
  */
 function changePanelVisibility() {
-  pnButtonsGameController.classList.toggle('invisible');
+  if (pnButtonsGameController.style.display === 'flex') {
+    pnButtonsGameController.style.display = 'none';
+  } else {
+    pnButtonsGameController.style.display = 'flex';
+  }
 }
 
 /**
