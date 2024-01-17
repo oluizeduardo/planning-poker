@@ -14,9 +14,9 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const roomName = inputRoomName.value;
-  const indexVotingSystem = selectVotingSystem.selectedIndex;
+  const votingSystem = selectVotingSystem.value;
 
-  if (roomName && indexVotingSystem > 0) {
+  if (roomName && votingSystem > 0) {
     emitCreateRoom(roomName);
     inputRoomName.value = '';
   } else {
