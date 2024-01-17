@@ -184,18 +184,21 @@ function isRoomEmpty(roomId) {
 }
 
 /**
+ * Extracts the usernames and corresponding points of players who have voted in a given room.
  *
- * @param {String} roomId
- * @return {void}
+ * @param {string} roomId - The identifier of the room.
+ * @return {Array} An array of objects containing the username and points of players who have voted.
+ * @throws {Error} Throws an error if there is an issue retrieving user information.
  */
 function extractPoints(roomId) {
+  // Get all the players from this room.
   const users = getUsers(roomId);
 
-  const points = users
-    .filter((user) => user.point !== null && user.point !== undefined)
-    .map((user) => user.point);
+  // Filter players who voted.
+  const playersWhoVoted = users
+    .filter((user) => user.userName && user.point !== null && user.point !== undefined);
 
-  return points;
+  return playersWhoVoted.map((user) => ({userName: user.userName, points: user.point}));
 }
 
 export {

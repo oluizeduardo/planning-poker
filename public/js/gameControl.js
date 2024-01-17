@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import {printRoomName} from './game.js';
 import {
-  emitGetFinalAverage,
   emitRestartGame,
+  emitReviewEstimates,
   emitUpdateRoomName,
   emitUpdateUserModeratorStatus,
 } from './socket-front-game.js';
@@ -13,8 +13,6 @@ const btnStartStopModerating = document.getElementById('btnStartModerating');
 const btnEditRoomName = document.getElementById('btnEditRoomName');
 const btnReviewEstimates = document.getElementById('btnReviewEstimates');
 const btnRestartGame = document.getElementById('btnRestartGame');
-const panelBaseCards = document.getElementById('panel-base-cards');
-const panelBaseChart = document.getElementById('panel-base-chart');
 
 // /////////////////////////////
 // Start/Stop Moderating
@@ -56,20 +54,14 @@ btnEditRoomName.addEventListener('click', () => {
 // Review Estimates
 // /////////////////////////////
 btnReviewEstimates.addEventListener('click', () => {
-  panelBaseCards.style.display = 'none';
-  panelBaseChart.style.display = 'flex';
-
   const {roomId} = getUserData();
-  emitGetFinalAverage(roomId);
+  emitReviewEstimates(roomId);
 });
 
 // /////////////////////////////
 // Restart Game
 // /////////////////////////////
 btnRestartGame.addEventListener('click', () => {
-  panelBaseChart.style.display = 'none';
-  panelBaseCards.style.display = 'flex';
-
   const {roomId} = getUserData();
   emitRestartGame(roomId);
 });

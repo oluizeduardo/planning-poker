@@ -11,6 +11,9 @@
   --card-center-icon-border-color: #bcc7cc;
   --position_top_show_message_alert : 85vh;
   --avatar-size: 28.6px;
+  --table-border-radius: 20px;
+  --white-shadow-box-shadow: 3px 3px 3px rgba(253, 253, 253, 0.123);
+  --dark-shadow-box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.123);
 }
 body {
   background-color: var(--primary-light-background-color);
@@ -78,7 +81,7 @@ header {
   width: 133px;
   height: 160px;
   border-radius: 4px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.123);
+  box-shadow: var(--dark-shadow-box-shadow);
 }
 .card:hover {
   border: 1px solid var(--card-hover-border-color);
@@ -115,7 +118,7 @@ header {
   transform: rotate(-180deg);
 }
 .white-shadow {
-  box-shadow: 3px 3px 3px rgba(253, 253, 253, 0.123);
+  box-shadow: var(--white-shadow-box-shadow);
 }
 button {
   cursor: pointer;
@@ -161,8 +164,28 @@ button {
   margin-top: 50px;
 }
 /************************
+  BORDERS TABLE RESULT
+*************************/
+.table-top-left-round-border{
+  border-top-left-radius: var(--table-border-radius);
+}
+.table-top-right-round-border{
+  border-top-right-radius: var(--table-border-radius);
+}
+.table-bottom-left-round-border{
+  border-bottom-left-radius: var(--table-border-radius);
+}
+.table-bottom-right-round-border{
+  border-bottom-right-radius: var(--table-border-radius);
+}
+/************************
     MEDIA QUERIES
 *************************/
+@media (max-width: 600px) {
+  .btn-text-visibility {
+    display: none;
+  }
+}
 @media (max-width: 1200px) {
   header {
     margin-bottom: 20px;
@@ -175,10 +198,7 @@ button {
   .card:nth-child(10) {
     grid-row: 4;
     grid-column: 2;
-  }
-  .btn-text-visibility {
-    display: none;
-  }
+  }  
   .card {
     width: 93px;
     height: 115px;

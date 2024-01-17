@@ -44,24 +44,64 @@ socket.on('show_player_done', (userId) => {
 
 // Emitted by the server to reveal the room's final result.
 socket.on('reveal_final_result', (finalResultObject) => {
-  printAveragePoints(finalResultObject.finalAverage);
+  switchToResultPanel();
+  printAveragePoints(finalResultObject);
 });
 
 // Emitted by the server to to restart the game in the front-end.
 socket.on('restart_game_front', () => {
+  switchToGamePanel();
   clearPlayerDone();
-  printAveragePoints('0');
   removeBackgroundFromSelectedCards();
   showMessageNewGameSession();
 });
 
+const panelBaseCards = document.getElementById('panel-base-cards');
+const panelBaseChart = document.getElementById('panel-base-chart');
+
 /**
- * Prints the average points to a specified HTML element with the id 'final-average'.
- * @param {number} averagePoints - The average points to be printed.
- * @return {void}
+ * Switches from the table result panel back to the game panel.
  */
-function printAveragePoints(averagePoints) {
-  document.getElementById('final-average').innerText = averagePoints;
+function switchToGamePanel() {
+  panelBaseChart.style.display = 'none';
+  panelBaseCards.style.display = 'flex';
+}
+/**
+ * Switches from the table result panel back to the game panel.
+ */
+function switchToResultPanel() {
+  panelBaseCards.style.display = 'none';
+  panelBaseChart.style.display = 'flex';
+}
+
+/**
+ * Updates the content of the specified table body element with the given data, including average points.
+ *
+ * @param {Object} data - The data object containing points, usernames, and average.
+ * @throws {Error} Throws an error if the table body element is not found.
+ */
+function printAveragePoints(data) {
+  const tableBody = document.getElementById('final-result-table-body');
+
+  if (!tableBody) {
+    throw new Error('Table body element \'final-result-table-body\' not found.');
+  }
+
+  // Distribute the points
+  const tableRows = data.points.map((item) => {
+    let points = item.points;
+    if (points === 'COFFEE') {
+      points = '☕';
+    }
+    return `<tr><td class="text-center">${item.userName}</td><td class="text-center">${points}</td></tr>`;
+  });
+
+  // Add two last lines for average
+  tableRows.push(
+    `<tr><td class="table-dark text-center table-bottom-left-round-border">Average</td><td class="table-dark text-center table-bottom-right-round-border">${data.average}</td></tr>`,
+  );
+
+  tableBody.innerHTML = tableRows.join('');
 }
 
 /**
@@ -174,15 +214,15 @@ function emitChosenCard(chosenCardData) {
 }
 
 /**
- * Emits a 'get_final_average' event to the server using the provided room ID.
+ * Emits a 'review_estimates' event to the server using the provided room ID.
  *
- * @param {string} roomId - The ID of the room for which the final average review is being emitted.
+ * @param {string} roomId - The ID of the room for which the final game result is being emitted.
  * @throws {Error} Throws an error if the roomId parameter is falsy.
  * @return {void}
  */
-function emitGetFinalAverage(roomId) {
+function emitReviewEstimates(roomId) {
   if (roomId) {
-    socket.emit('get_final_average', roomId);
+    socket.emit('review_estimates', roomId);
   }
 }
 
@@ -207,6 +247,6 @@ export {
   emitUpdateUserModeratorStatus,
   emitUpdateRoomName,
   emitChosenCard,
-  emitGetFinalAverage,
+  emitReviewEstimates,
   emitRestartGame,
 };

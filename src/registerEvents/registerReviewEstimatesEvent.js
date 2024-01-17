@@ -1,32 +1,32 @@
 /* eslint-disable max-len */
 import {extractPoints, getUsers} from '../models/game.model.js';
 
-const EVENT_NAME = 'get_final_average';
+const EVENT_NAME = 'review_estimates';
 
 /**
- * Registers a socket.io event listener for the 'get_final_average' event.
+ * Registers a socket.io event listener for the 'review_estimates' event.
  *
  * @param {Socket} socket - The socket connection to listen on.
  * @param {Server} io - The socket.io server.
  * @return {void}
  */
-function registerGetFinalAverageEvent(socket, io) {
+function registerReviewEstimatesEvent(socket, io) {
   socket.on(EVENT_NAME, (roomId) => {
-    handleGetFinalAverage(io, roomId);
+    handleReviewEstimates(io, roomId);
   });
 }
 
 /**
- * Handles the request to get the final average points for a room and emits the result to the room.
+ * Handles the request to review the estimates of a room.
  *
  * @param {Server} io - The socket.io server.
  * @param {string} roomId - The identifier of the room.
  * @return {void}
  */
-function handleGetFinalAverage(io, roomId) {
+function handleReviewEstimates(io, roomId) {
   const finalResultObject = {
     roomId,
-    finalAverage: calculateAveragePoints(roomId),
+    average: calculateAveragePoints(roomId),
     points: extractPoints(roomId),
   };
 
@@ -63,4 +63,4 @@ function calculateAveragePoints(roomId) {
   return Math.ceil(totalPoints / votedPlayers.length);
 }
 
-export default registerGetFinalAverageEvent;
+export default registerReviewEstimatesEvent;
