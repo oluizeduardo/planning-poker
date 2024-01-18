@@ -11,9 +11,18 @@ const socket = io();
 function emitCreateRoom(roomName) {
   socket.emit('create_room', roomName, (roomId) => {
     if (roomId) {
+      saveRoomIdSessionStorage(roomId);
       redirectToTheGame(roomId);
     }
   });
+}
+
+/**
+ * Save roomId in the session storage.
+ * @param {string} roomId The ID that identifies the room.
+ */
+function saveRoomIdSessionStorage(roomId) {
+  sessionStorage.setItem('room_id', roomId);
 }
 
 /**

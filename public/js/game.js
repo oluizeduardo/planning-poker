@@ -173,8 +173,7 @@ async function handleRoomAvailable(roomId) {
   try {
     const storedData = getUserData() || {};
     const userName = await getValidUserName(storedData.userName);
-
-    const moderator = storedData.isModerator || false;
+    const moderator = storedData.isModerator || wasRoomCreatedByThisBrowser(roomId);
     const point = storedData.point || null;
 
     const userData = {
@@ -190,6 +189,17 @@ async function handleRoomAvailable(roomId) {
   } catch (error) {
     console.error('Error:', error.message);
   }
+}
+
+/**
+ * Checks if the current browser session created the room with the specified roomId.
+ *
+ * @param {string} roomId - The unique identifier of the room to check.
+ * @return {boolean} - Returns true if the room was created by the current browser session,
+ *                     false otherwise or if the room identifier is not found in sessionStorage.
+ */
+function wasRoomCreatedByThisBrowser(roomId) {
+  return (sessionStorage.getItem('room_id') === roomId);
 }
 
 /**
@@ -249,6 +259,7 @@ function processesBasicSettings(data) {
   if (data.isModerator) {
     adjustComponentsForModerator();
   }
+  sessionStorage.removeItem('room_id');
 }
 
 /**
