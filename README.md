@@ -37,3 +37,9 @@ If you have additional questions or topics that you believe would benefit those 
 ## License
 This project is licensed under the [MIT License](https://github.com/oluizeduardo/planning-poker/blob/master/LICENSE).
 
+## Screenshots
+<div align="center">
+  <a href="https://planning-poker-5jpk.onrender.com/" target="_blank">
+    <img src="https://github.com/oluizeduardo/planning-poker/blob/main/images/planning_poker_screenshot.JPG">
+  </a>  
+</div align="center">
